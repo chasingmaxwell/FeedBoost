@@ -1,0 +1,34 @@
+{
+  "name": "reverb-feedboost",
+  "version": "1.0.0",
+  "description": "Get notified when your Reverb.com feed updates within an hour!",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/istanbul cover --print both ./node_modules/.bin/_mocha test",
+    "lint": "eslint .",
+    "checkup": "npm run lint && npm run test",
+    "build": "rm -rf build && mkdir build && babel src -d build",
+    "deploy": "npm run checkup && npm run build && npm prune --production && serverless deploy -v ; npm install",
+    "f-deploy": "npm run build && npm prune --production && serverless deploy -v ; npm install"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.6.9",
+    "cookie": "^0.3.1",
+    "dotenv": "^2.0.0",
+    "jsonwebtoken": "^7.1.9",
+    "request": "^2.78.0",
+    "request-promise": "^4.1.1",
+    "uuid": "^2.0.3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-preset-latest": "^6.16.0",
+    "eslint": "^3.8.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.1.2",
+    "sinon": "^1.17.6"
+  }
+}

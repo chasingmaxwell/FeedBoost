@@ -1,0 +1,103 @@
+service: reverb-feedboost
+provider:
+  name: aws
+  runtime: nodejs4.3
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:GetItem"
+        - "dynamodb:Query"
+        - "dynamodb:PutItem"
+        - "dynamodb:DeleteItem"
+        - "dynamodb:Scan"
+        - "dynamodb:GetRecords"
+        - "dynamodb:GetShardIterator"
+        - "dynamodb:DescribeStream"
+        - "dynamodb:ListStreams"
+      Resource:
+        - "arn:aws:dynamodb:us-east-1:*:table/reverbUser"
+        - "arn:aws:dynamodb:us-east-1:*:table/reverbUser/index/*"
+        - "arn:aws:dynamodb:us-east-1:*:table/reverbUser/stream/*"
+    - Effect: "Allow"
+      Action:
+        - "ses:SendEmail"
+      Resource:
+        - "arn:aws:ses:us-east-1:*:identity/*"
+functions:
+  apphome:
+    handler: build/handlers/app.home
+    events:
+      - http:
+          path: /
+          method: get
+  appsub:
+    handler: build/handlers/app.subscribe
+    events:
+      - http:
+          path: subscribe
+          method: get
+      - http:
+          path: login
+          method: get
+  appunsub:
+    handler: build/handlers/app.unsubscribe
+    events:
+      - http:
+          path: unsubscribe
+          method: get
+  appauth:
+    handler: build/handlers/app.auth
+    events:
+      - http:
+          path: subscribe/success
+          method: get
+  feedcheck:
+    handler: build/handlers/feed.check
+    events:
+      - schedule: rate(1 hour)
+resources:
+  Resources:
+    UserDB:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: "reverbUser"
+        StreamSpecification:
+          StreamViewType: "KEYS_ONLY"
+        AttributeDefinitions:
+          -
+            AttributeName: "email"
+            AttributeType: "S"
+          -
+            AttributeName: "code"
+            AttributeType: "S"
+        KeySchema:
+          - 
+            AttributeName: "email"
+            KeyType: "HASH"
+        GlobalSecondaryIndexes:
+          - 
+            IndexName: "code"
+            KeySchema:
+              - 
+                AttributeName: "code"
+                KeyType: "HASH"
+            Projection:
+              ProjectionType: "KEYS_ONLY"
+            ProvisionedThroughput:
+              ReadCapacityUnits: "1"
+              WriteCapacityUnits: "1"
+        ProvisionedThroughput:
+          ReadCapacityUnits: "1"
+          WriteCapacityUnits: "1"
+package:
+  exclude:
+    - .babelrc
+    - coverage/**
+    - .eslintignore
+    - .eslintrc.js
+    - .git/**
+    - .gitignore
+    - src/**
+    - test/**
+    - '*.swp'
+    - '**/*.swp'

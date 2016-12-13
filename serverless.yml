@@ -60,7 +60,7 @@ resources:
     pathmapping:
       Type: AWS::ApiGateway::BasePathMapping
       Properties:
-        DomainName: https://feedboost.rocks
+        DomainName: feedboost.rocks
         RestApiId:
           Ref: ApiGatewayRestApi
     UserDB:

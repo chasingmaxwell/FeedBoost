@@ -26,7 +26,7 @@ module.exports = (event, context, callback) => {
     page.content = `
       <h2>Hi, ${user.email}!</h2>
       <p>You've subscribed to receive email notifications when new items appear in your feed.</p>
-      <p class="cta"><a href="${process.env.REVERB_HOST}/my/feed">Take me to my feed!</a></p>
+      <p class="cta"><a href="${process.env.REVERB_HOST}/my/feed" target="_blank">Take me to my feed!</a></p>
     `;
     page.footer = `
       <p>Would you like to stop receiving notifications? <a href="${process.env.BASE_URI}/unsubscribe">Unsubscribe</a>.</p>

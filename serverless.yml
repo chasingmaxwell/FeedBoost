@@ -57,6 +57,12 @@ functions:
       - schedule: rate(1 hour)
 resources:
   Resources:
+    pathmapping:
+      Type: AWS::ApiGateway::BasePathMapping
+      Properties:
+        DomainName: https://feedboost.rocks
+        RestApiId:
+          Ref: ApiGatewayRestApi
     UserDB:
       Type: AWS::DynamoDB::Table
       Properties:

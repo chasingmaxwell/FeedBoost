@@ -87,7 +87,7 @@ module.exports = (event, context, callback) => {
                     Data: 'Your feed updated!'
                   }
                 },
-                Source: process.env.APP_EMAIL
+                Source: process.env.APP_NAME + ' <' + process.env.APP_EMAIL + '>'
               }, (err) => {
                 if (err) {
                   _reject(err);

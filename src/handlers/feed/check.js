@@ -101,7 +101,7 @@ module.exports = (event, context, callback) => {
                 })
 
                 // Set new listing IDs on user.
-                User.put(data.user)
+                User.update(data.user)
                 .then(() => {
                   data.updated = true;
                   _resolve(data);

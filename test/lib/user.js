@@ -73,7 +73,7 @@ describe('User', () => {
     })
   })
 
-  describe('#put', () => {
+  describe('#update', () => {
     let user = {
       code: '123',
       email: 'test@example.com',
@@ -81,8 +81,8 @@ describe('User', () => {
     };
 
     it('should create a user', () => {
-      dbStubs.stubs.put.yields();
-      return User.put(user)
+      dbStubs.stubs.update.yields();
+      return User.update(user)
       .then((createdUser) => {
         assert.deepStrictEqual(user, createdUser, 'The created user contains the same properties as the ones passed.');
       })
@@ -91,9 +91,9 @@ describe('User', () => {
     it('should report error messages', () => {
       let expectedErr = new Error('Danger!');
 
-      dbStubs.stubs.put.yields(expectedErr);
+      dbStubs.stubs.update.yields(expectedErr);
 
-      return User.put(user)
+      return User.update(user)
 
       .then(() => {
         throw new Error('No error reported.');

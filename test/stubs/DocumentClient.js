@@ -2,7 +2,7 @@ const sinon = require('sinon');
 const AWS = require('aws-sdk');
 
 let stubs = {
-  put: null,
+  update: null,
   delete: null,
   get: null
 };

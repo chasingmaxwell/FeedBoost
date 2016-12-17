@@ -42,7 +42,7 @@ module.exports = (event, context, callback) => {
       email: data.user.email
     };
 
-    return User.put(user)
+    return User.update(user)
 
     .catch((err) => {
       // The conditional check fails if the user already exists.

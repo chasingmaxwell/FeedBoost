@@ -8,9 +8,14 @@ module.exports = (event, context, callback) => {
     content: '',
     footer: ''
   };
+  let message = '';
 
   if (event.headers.hasOwnProperty('Cookie')) {
     cookieString = event.headers.Cookie;
+  }
+
+  if (event.queryStringParameters.hasOwnProperty('message')) {
+    message = `<div class="message">${event.queryStringParameters.message}</div>`;
   }
 
   // Get the token.
@@ -166,10 +171,17 @@ module.exports = (event, context, callback) => {
             padding: 1em 0;
             color: #999;
           }
+          .message {
+            margin: 1em 0;
+            border: 1px solid #85dc79;
+            background: 1px solid #afdca8;
+            padding: .75em;
+          }
         </style>
       </head>
       <body>
         <header id="page-header">
+          ${message}
           <h1 id="logo">${process.env.APP_NAME}</h1>
         </header>
         <section id="page-content">

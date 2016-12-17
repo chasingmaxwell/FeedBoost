@@ -29,7 +29,7 @@ module.exports = (event, context, callback) => {
       statusCode: 302,
       body: '',
       headers: {
-        'Location': process.env.BASE_URI + '?message=You+have+been+successfully+unsubscribed.',
+        'Location': process.env.BASE_URI + '?successMessage=You+have+been+successfully+unsubscribed.',
         'Set-Cookie': cookie.serialize('rtoken', 'deleted', {
           httpOnly: true,
           maxAge: -1,

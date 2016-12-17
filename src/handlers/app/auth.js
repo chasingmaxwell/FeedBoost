@@ -75,8 +75,18 @@ module.exports = (event, context, callback) => {
   })
 
   // Uh-oh. Something went wrong.
-  // @TODO: redirect to home, delete the rtoken cookie, and set a message.
   .catch((err) => {
-    callback(err);
+    callback(null, {
+      statusCode: 302,
+      body: '',
+      headers: {
+        'Location': process.env.BASE_URI + '?errorMessage=Oops!+We+were+unable+to+authenticate+with+your+reverb+account.+If+you+continue+to+have+trouble,+please+contact+peter@feedboost.rocks+for+help.',
+        'Set-Cookie': cookie.serialize('rtoken', 'deleted', {
+          httpOnly: true,
+          maxAge: -1,
+          path: '/'
+        })
+      }
+    });
   });
 };

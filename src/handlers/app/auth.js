@@ -75,6 +75,7 @@ module.exports = (event, context, callback) => {
   })
 
   // Uh-oh. Something went wrong.
+  // @TODO: redirect to home, delete the rtoken cookie, and set a message.
   .catch((err) => {
     callback(err);
   });

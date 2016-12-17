@@ -1,5 +1,6 @@
 require('dotenv').config();
 const User = require('../../lib/user');
+const cookie = require('cookie');
 const Token = require('../../lib/token');
 
 module.exports = (event, context, callback) => {
@@ -23,13 +24,17 @@ module.exports = (event, context, callback) => {
   })
 
   // Redirect to home.
-  // @TODO: delete the rtoken cookie.
   .then(() => {
     callback(null, {
       statusCode: 302,
       body: '',
       headers: {
-        'Location': process.env.BASE_URI + '?message=You+have+been+successfully+unsubscribed.'
+        'Location': process.env.BASE_URI + '?message=You+have+been+successfully+unsubscribed.',
+        'Set-Cookie': cookie.serialize('rtoken', 'deleted', {
+          httpOnly: true,
+          maxAge: -1,
+          path: '/'
+        })
       }
     });
   })

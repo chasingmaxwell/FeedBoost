@@ -29,7 +29,7 @@ module.exports = (event, context, callback) => {
       statusCode: 302,
       body: '',
       headers: {
-        'Location': process.env.BASE_URI
+        'Location': process.env.BASE_URI + '?message=You+have+been+successfully+unsubscribed.'
       }
     });
   })

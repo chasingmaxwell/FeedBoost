@@ -58,20 +58,22 @@ module.exports = (event, context, callback) => {
                     Html: {
                       Data: `
                         <!doctype html>
-                        <html>
+                        <html style="background: #85dc79;">
                         <head>
                           <meta name="viewport" content="width=device-width" />
                           <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
                           <title>${process.env.APP_NAME} Notification</title>
+                          <link href="https://fonts.googleapis.com/css?family=Yesteryear" rel="stylesheet">
                         </head>
-                        <body>
+                        <body style="font-family: 'PT Sans', 'Verdana', sans-serif; color: #333; line-height: 1.75em; padding: 0 10px; background: #f5f5f5;">
                           <table border="0" cellpadding="0" cellspacing="0">
                             <tr>
                               <td>
+                                <h1 style="font-family: 'Yesteryear', sans-serif; font-size: 50px; font-weight: 400px; line-height: 2; text-align: center;">FeedBoost</h1>
                                 <p>Hello ${user.email},</p>
                                 <p>Your feed just updated! Here's the new gear:</p>
                                 ${matchMarkup}
-                                <p><a href="${process.env.REVERB_HOST}/my/feed">Take me to my feed!</a></p>
+                                <p><a href="${process.env.REVERB_HOST}/my/feed" style="color: #0080a5;">Take me to my feed!</a></p>
                               </td>
                             </tr>
                             <tr>

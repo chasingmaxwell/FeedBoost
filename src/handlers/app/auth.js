@@ -44,6 +44,7 @@ module.exports = (event, context, callback) => {
 
     return User.update(user)
 
+    // @TODO: is this still necessary?
     .catch((err) => {
       // The conditional check fails if the user already exists.
       if (err.name !== 'ConditionalCheckFailedException') {
@@ -76,6 +77,8 @@ module.exports = (event, context, callback) => {
 
   // Uh-oh. Something went wrong.
   .catch((err) => {
+    console.log(err);
+
     callback(null, {
       statusCode: 302,
       body: '',

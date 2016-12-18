@@ -77,7 +77,7 @@ module.exports = (event, context, callback) => {
 
   // Uh-oh. Something went wrong.
   .catch((err) => {
-    console.log(err);
+    console.error(err);
 
     callback(null, {
       statusCode: 302,

@@ -15,12 +15,14 @@ module.exports = (event, context, callback) => {
     cookieString = event.headers.Cookie;
   }
 
-  if (event.queryStringParameters.hasOwnProperty('successMessage')) {
-    successMessage = `<div class="successMessage message">${event.queryStringParameters.successMessage}</div>`;
-  }
+  if (event.queryStringParameters) {
+    if (event.queryStringParameters.hasOwnProperty('successMessage')) {
+      successMessage = `<div class="successMessage message">${event.queryStringParameters.successMessage}</div>`;
+    }
 
-  if (event.queryStringParameters.hasOwnProperty('errorMessage')) {
-    errorMessage = `<div class="errorMessage message">${event.queryStringParameters.errorMessage}</div>`;
+    if (event.queryStringParameters.hasOwnProperty('errorMessage')) {
+      errorMessage = `<div class="errorMessage message">${event.queryStringParameters.errorMessage}</div>`;
+    }
   }
 
   // Get the token.
@@ -126,6 +128,7 @@ module.exports = (event, context, callback) => {
           body {
             font-family: "PT Sans", "Verdana", sans-serif;
             color: #333;
+            font-size: 16px;
             line-height: 1.75em;
             max-width: 560px;
             margin: 0 auto;

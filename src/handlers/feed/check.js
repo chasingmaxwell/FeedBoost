@@ -65,7 +65,7 @@ module.exports = (event, context, callback) => {
                           <title>${process.env.APP_NAME} Notification</title>
                           <link href="https://fonts.googleapis.com/css?family=Yesteryear" rel="stylesheet">
                         </head>
-                        <body style="font-family: 'PT Sans', 'Verdana', sans-serif; color: #333; line-height: 1.75em; padding: 0 10px; background: #f5f5f5;">
+                        <body style="font-size: 16px; font-family: 'PT Sans', 'Verdana', sans-serif; color: #333; line-height: 1.75em; padding: 0 10px; background: #f5f5f5;">
                           <table border="0" cellpadding="0" cellspacing="0">
                             <tr>
                               <td>

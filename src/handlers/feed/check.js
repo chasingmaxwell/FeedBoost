@@ -41,7 +41,7 @@ module.exports = (event, context, callback) => {
               let matchMarkup = '<table border="0" cellpadding="0" cellspacing="0">';
 
               diff.forEach((item) => {
-                matchMarkup += `<tr><td><a href="${item._links.web.href}">${item.title}</a> - ${item.price.display}</td><tr>`
+                matchMarkup += `<tr><td><a href="${item._links.web.href}" style="color: #0080a5;">${item.title}</a> - ${item.price.display}</td><tr>`
               });
 
               matchMarkup += '</table>';
@@ -77,7 +77,7 @@ module.exports = (event, context, callback) => {
                               </td>
                             </tr>
                             <tr>
-                              <td>Prefer not to receive notifications about new items in your feed? <a href="${process.env.BASE_URI}/unsubscribe">Unsubscribe</a>.</td>
+                              <td>Prefer not to receive notifications about new items in your feed? <a href="${process.env.BASE_URI}/unsubscribe" style="color: #0080a5;">Unsubscribe</a>.</td>
                             </tr>
                           </table>
                         </body>

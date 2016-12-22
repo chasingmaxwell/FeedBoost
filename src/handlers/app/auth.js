@@ -19,9 +19,8 @@ module.exports = (event, context, callback) => {
   })
 
   // Register for the app uninstall webhook.
-  // @TODO: move webhook stuff to a lib.
   .then((data) => {
-    let hash = Token.sign(data.user.email);
+    let hash = encodeURIComponent(Token.sign(data.user.email));
     return request({
       uri: `${process.env.REVERB_HOST}/api/webhooks/registrations`,
       method: 'post',

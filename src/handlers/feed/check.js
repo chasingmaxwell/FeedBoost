@@ -90,7 +90,7 @@ module.exports = (event, context, callback) => {
                               </td>
                             </tr>
                             <tr>
-                              <td>Prefer not to receive notifications about new items in your feed? <a href="${process.env.BASE_URI}/unsubscribe" style="color: #0080a5;">Unsubscribe</a>.</td>
+                              <td>Prefer not to receive notifications about new items in your feed? Uninstall FeedBoost from your <a href="${process.env.REVERB_HOST}/apps/installed" style="color: #0080a5;">apps dashboard</a> on Reverb.com.</td>
                             </tr>
                           </table>
                         </body>

@@ -45,7 +45,7 @@ functions:
     handler: build/handlers/app.unsubscribe
     events:
       - http:
-          path: unsubscribe
+          path: unsubscribe/{hash}
           method: get
   appauth:
     handler: build/handlers/app.auth

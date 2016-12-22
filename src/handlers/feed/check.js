@@ -64,12 +64,25 @@ module.exports = (event, context, callback) => {
                           <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
                           <title>${process.env.APP_NAME} Notification</title>
                           <link href="https://fonts.googleapis.com/css?family=Yesteryear" rel="stylesheet">
+                          <style type="text/css">
+                            a {
+                              color: #0080a5;
+                              text-decoration: none;
+                            }
+                            a:hover, a:visited, a:active {
+                              color: #00607d;
+                            }
+                          </style>
                         </head>
                         <body style="font-size: 16px; font-family: 'PT Sans', 'Verdana', sans-serif; color: #333; line-height: 1.75em; padding: 0 10px; background: #f5f5f5;">
                           <table border="0" cellpadding="0" cellspacing="0">
                             <tr>
+                              <td style="padding: 20px 0;">
+                                <img src="${process.env.FILES_URL}/logo.png" title="FeedBoost" alt="FeedBoost Logo" width="147" height="38" />
+                              </td>
+                            </tr>
+                            <tr>
                               <td>
-                                <h1 style="font-family: 'Yesteryear', sans-serif; font-size: 50px; font-weight: 400px; line-height: 2; text-align: center;">FeedBoost</h1>
                                 <p>Hello ${user.email},</p>
                                 <p>Your feed just updated! Here's the new gear:</p>
                                 ${matchMarkup}

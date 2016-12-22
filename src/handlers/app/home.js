@@ -150,10 +150,15 @@ module.exports = (event, context, callback) => {
             color: #00607d;
           }
           #logo {
-            font-size: 50px;
-            font-weight: 400px;
+            height: 4em;
+            margin: 3em auto;
+            display: block;
+          }
+          #logo .fallback {
+            font-size: 66px;
+            font-weight: 400;
             font-family: 'Yesteryear', cursive;
-            line-height: 2;
+            line-height: 1em;
             text-align: center;
           }
           .cta {
@@ -197,7 +202,7 @@ module.exports = (event, context, callback) => {
         <header id="page-header">
           ${successMessage}
           ${errorMessage}
-          <h1 id="logo">${process.env.APP_NAME}</h1>
+          <object id="logo" type="image/svg+xml" data="${process.env.FILES_URL}/logo.svg"><h1 class="fallback">${process.env.APP_NAME}</h1></object>
         </header>
         <section id="page-content">
           ${page.content}

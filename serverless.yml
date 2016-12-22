@@ -1,4 +1,6 @@
 service: reverb-feedboost
+plugins:
+  - files
 provider:
   name: aws
   runtime: nodejs4.3
@@ -57,6 +59,11 @@ functions:
       - schedule: rate(1 hour)
 resources:
   Resources:
+    filesDir:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: feedboostassetsdev
+        AccessControl: PublicRead
     pathmapping:
       Type: AWS::ApiGateway::BasePathMapping
       Properties:

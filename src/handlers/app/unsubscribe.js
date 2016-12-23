@@ -1,7 +1,6 @@
 require('dotenv').config();
 const Token = require('../../lib/token');
 const User = require('../../lib/user');
-const request = require('request-promise');
 
 module.exports = (event, context, callback) => {
   let email = Token.verify(decodeURIComponent(event.pathParameters.hash));

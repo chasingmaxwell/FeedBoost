@@ -18,26 +18,6 @@ module.exports = (event, context, callback) => {
     }
   })
 
-  // Register for the app uninstall webhook.
-  .then((data) => {
-    let hash = encodeURIComponent(Token.sign(data.user.email));
-    return request({
-      uri: `${process.env.REVERB_HOST}/api/webhooks/registrations`,
-      method: 'post',
-      json: true,
-      headers: {
-        Authorization: `Bearer ${data.access_token}`
-      },
-      body: {
-        url: `${process.env.BASE_URI}/unsubscribe/${hash}`,
-        topic: 'app/uninstalled'
-      }
-    })
-    .then(() => {
-      return data;
-    })
-  })
-
   // Get user data from Reverb.
   .then((data) => {
     return request({
@@ -52,6 +32,26 @@ module.exports = (event, context, callback) => {
         user: user,
         code: data.access_token
       };
+    })
+  })
+
+  // Register for the app uninstall webhook.
+  .then((data) => {
+    let hash = encodeURIComponent(Token.sign(data.user.email));
+    return request({
+      uri: `${process.env.REVERB_HOST}/api/webhooks/registrations`,
+      method: 'post',
+      json: true,
+      headers: {
+        Authorization: `Bearer ${data.code}`
+      },
+      body: {
+        url: `${process.env.BASE_URI}/unsubscribe/${hash}`,
+        topic: 'app/uninstalled'
+      }
+    })
+    .then(() => {
+      return data;
     })
   })
 

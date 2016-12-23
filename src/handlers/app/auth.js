@@ -3,6 +3,7 @@ const request = require('request-promise');
 const cookie = require('cookie');
 const User = require('../../lib/user');
 const Token = require('../../lib/token');
+const Cryptr = require('cryptr');
 
 module.exports = (event, context, callback) => {
   return request({
@@ -37,13 +38,15 @@ module.exports = (event, context, callback) => {
 
   // Register for the app uninstall webhook.
   .then((data) => {
-    let hash = encodeURIComponent(Token.sign(data.user.email));
+    let cryptr = new Cryptr(process.env.CRYPTR_KEY);
+    let hash = encodeURIComponent(cryptr.encrypt(data.user.email));
     return request({
       uri: `${process.env.REVERB_HOST}/api/webhooks/registrations`,
       method: 'post',
       json: true,
       headers: {
-        Authorization: `Bearer ${data.code}`
+        Authorization: `Bearer ${data.code}`,
+        'Content-Type': 'application/hal+json'
       },
       body: {
         url: `${process.env.BASE_URI}/unsubscribe/${hash}`,

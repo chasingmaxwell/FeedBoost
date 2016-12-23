@@ -1,9 +1,10 @@
 require('dotenv').config();
-const Token = require('../../lib/token');
 const User = require('../../lib/user');
+const Cryptr = require('cryptr');
 
 module.exports = (event, context, callback) => {
-  let email = Token.verify(decodeURIComponent(event.pathParameters.hash));
+  let cryptr = new Cryptr(process.env.CRYPTR_KEY);
+  let email = cryptr.decrypt(decodeURIComponent(event.pathParameters.hash));
 
   return User.delete(email)
 

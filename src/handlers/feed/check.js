@@ -165,12 +165,15 @@ module.exports = (event, context, callback) => {
         errors = errors.concat(batchErrors);
       })
 
-      callback(null, {
+      let results = {
         count: count,
         updated: updated,
         notified: notified,
         errors: errors
-      });
+      };
+
+      console.info(results);
+      callback(null, results);
     })
   })
 

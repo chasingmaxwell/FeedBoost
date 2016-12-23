@@ -38,7 +38,7 @@ module.exports = (event, context, callback) => {
 
 
             if (diff.length > 0) {
-              let matchMarkup = '<table border="0" cellpadding="0" cellspacing="0">';
+              let matchMarkup = '<table border="0" cellpadding="0" cellspacing="0" style="padding: 20px 0;">';
 
               diff.forEach((item) => {
                 matchMarkup += `<tr><td><a href="${item._links.web.href}" style="color: #0080a5;">${item.title}</a> - ${item.price.display}</td><tr>`
@@ -90,7 +90,7 @@ module.exports = (event, context, callback) => {
                               </td>
                             </tr>
                             <tr>
-                              <td>Prefer not to receive notifications about new items in your feed? Uninstall FeedBoost from your <a href="${process.env.REVERB_HOST}/apps/installed" style="color: #0080a5;">apps dashboard</a> on Reverb.com.</td>
+                              <td style="font-size: 12px; color: #888;">Prefer not to receive notifications about new items in your feed? Uninstall FeedBoost from your <a href="${process.env.REVERB_HOST}/apps/installed" style="color: #0080a5;">apps dashboard</a> on Reverb.com.</td>
                             </tr>
                           </table>
                         </body>

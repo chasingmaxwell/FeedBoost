@@ -46,7 +46,7 @@ functions:
     events:
       - http:
           path: unsubscribe/{hash}
-          method: get
+          method: post
   appauth:
     handler: build/handlers/app.auth
     events:

@@ -6,6 +6,8 @@ const Token = require('../../lib/token');
 const Cryptr = require('cryptr');
 
 module.exports = (event, context, callback) => {
+  let cryptr = new Cryptr(process.env.CRYPTR_KEY);
+
   // Check for a valid state parameter.
   return new Promise((resolve, reject) => {
     let state = Token.verify(event.queryStringParameters.state);
@@ -52,7 +54,6 @@ module.exports = (event, context, callback) => {
 
   // Register for the app uninstall webhook.
   .then((data) => {
-    let cryptr = new Cryptr(process.env.CRYPTR_KEY);
     let hash = encodeURIComponent(cryptr.encrypt(data.user.email));
     return request({
       uri: `${process.env.REVERB_HOST}/api/webhooks/registrations`,
@@ -75,7 +76,7 @@ module.exports = (event, context, callback) => {
   // Try to create a corresponding user.
   .then((data) => {
     const user = {
-      code: data.code,
+      code: cryptr.encrypt(data.code),
       email: data.user.email
     };
 

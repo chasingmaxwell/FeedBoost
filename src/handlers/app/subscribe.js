@@ -29,11 +29,12 @@ module.exports = (event, context, callback) => {
   })
 
   .catch(() => {
+    let state = Token.sign(process.env.REVERB_KEY);
     callback(null, {
       statusCode: 302,
       body: '',
       headers: {
-        'Location': `${process.env.REVERB_HOST}/oauth/authorize?client_id=${process.env.REVERB_KEY}&redirect_uri=${process.env.REVERB_REDIRECT_URI}&response_type=code&scope=read_lists+read_profile`
+        'Location': `${process.env.REVERB_HOST}/oauth/authorize?client_id=${process.env.REVERB_KEY}&redirect_uri=${process.env.REVERB_REDIRECT_URI}&response_type=code&scope=read_lists+read_profile&state=${state}`
       }
     });
   })

@@ -6,17 +6,31 @@ const Token = require('../../lib/token');
 const Cryptr = require('cryptr');
 
 module.exports = (event, context, callback) => {
-  return request({
-    uri: `${process.env.REVERB_HOST}/oauth/token`,
-    method: 'post',
-    json: true,
-    qs: {
-      client_id: process.env.REVERB_KEY,
-      client_secret: process.env.REVERB_SECRET,
-      code: event.queryStringParameters.code,
-      grant_type: 'authorization_code',
-      redirect_uri: process.env.REVERB_REDIRECT_URI
+  // Check for a valid state parameter.
+  return new Promise((resolve, reject) => {
+    let state = Token.verify(event.queryStringParameters.state);
+    if (state !== process.env.REVERB_KEY) {
+      reject('The state parmater did not match.');
+      return;
     }
+
+    resolve();
+  })
+
+  // Request access token from Reverb.
+  .then(() => {
+    return request({
+      uri: `${process.env.REVERB_HOST}/oauth/token`,
+      method: 'post',
+      json: true,
+      qs: {
+        client_id: process.env.REVERB_KEY,
+        client_secret: process.env.REVERB_SECRET,
+        code: event.queryStringParameters.code,
+        grant_type: 'authorization_code',
+        redirect_uri: process.env.REVERB_REDIRECT_URI
+      }
+    })
   })
 
   // Get user data from Reverb.

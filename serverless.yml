@@ -53,6 +53,12 @@ functions:
       - http:
           path: subscribe/success
           method: get
+  logout:
+    handler: build/handlers/app.logout
+    events:
+      - http:
+          path: logout
+          method: get
   feedcheck:
     handler: build/handlers/feed.check
     events:

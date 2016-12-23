@@ -42,6 +42,7 @@ module.exports = (event, context, callback) => {
     `;
     page.footer = `
       <p>Would you like to stop receiving notifications? Uninstall FeedBoost from your <a href="${process.env.REVERB_HOST}/apps/installed" target="_blank">apps dashboard</a> on Reverb.com.</p>
+      <p>Not ${user.email}? <a href="${process.env.BASE_URI}/logout">Log out</a>.
     `;
   })
 

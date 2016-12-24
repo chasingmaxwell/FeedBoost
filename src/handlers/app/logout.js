@@ -1,4 +1,3 @@
-require('dotenv').config();
 const cookie = require('cookie');
 
 module.exports = (event, context, callback) => {

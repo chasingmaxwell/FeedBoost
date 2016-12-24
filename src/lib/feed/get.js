@@ -1,4 +1,3 @@
-require('dotenv').config();
 const request = require('request-promise');
 const Cryptr = require('cryptr');
 

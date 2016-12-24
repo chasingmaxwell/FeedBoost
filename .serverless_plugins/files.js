@@ -21,7 +21,7 @@ class Files {
       localDir: 'files',
       deleteRemoved: true,
       s3Params: {
-        Bucket: 'feedboostassetsdev',
+        Bucket: 'feedboostassets' + options.stage,
         Prefix: ''
       }
     };

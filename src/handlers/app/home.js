@@ -1,4 +1,3 @@
-require('dotenv').config();
 const User = require('../../lib/user');
 const Token = require('../../lib/token');
 

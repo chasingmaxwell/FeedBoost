@@ -4,7 +4,7 @@ const db = new AWS.DynamoDB.DocumentClient();
 // @TODO: add test coverage.
 module.exports = ({index, query, values}) => {
   let params = {
-    TableName: 'reverbUser'
+    TableName: `feedboostUser_${process.env.NODE_ENV}`
   };
 
   if (typeof index !== 'undefined') {

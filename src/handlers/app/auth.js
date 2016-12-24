@@ -1,4 +1,3 @@
-require('dotenv').config();
 const request = require('request-promise');
 const cookie = require('cookie');
 const User = require('../../lib/user');

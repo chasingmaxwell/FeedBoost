@@ -5,7 +5,7 @@ const Readable = require('stream').Readable;
 // @TODO: add test coverage.
 module.exports = ({index, query, values} = {index: null, query: null, values: null}) => {
   let params = {
-    TableName: 'reverbUser'
+    TableName: `feedboostUser_${process.env.NODE_ENV}`
   };
 
   if (typeof index !== 'undefined') {

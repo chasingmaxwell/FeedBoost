@@ -7,7 +7,7 @@ module.exports = (email) => {
       Key: {
         email: email
       },
-      TableName: 'reverbUser'
+      TableName: `feedboostUser_${process.env.NODE_ENV}`
     }, (err, data) => {
       if (err) {
         reject(err);

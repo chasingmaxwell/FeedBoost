@@ -1,4 +1,3 @@
-require('dotenv').config();
 const User = require('../../lib/user');
 const Cryptr = require('cryptr');
 

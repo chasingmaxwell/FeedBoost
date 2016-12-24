@@ -7,7 +7,7 @@ module.exports = (user) => {
   .then((validUser) => {
     return new Promise((resolve, reject) => {
       let params = {
-        TableName: 'reverbUser',
+        TableName: `feedboostUser_${process.env.NODE_ENV}`,
         Key: {
           email: validUser.email,
         },

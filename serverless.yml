@@ -76,13 +76,16 @@ resources:
       Properties:
         BucketName: feedboostassets${opt:stage}
         AccessControl: PublicRead
-    pathmapping:
-      Type: AWS::ApiGateway::BasePathMapping
-      Properties:
-        DomainName: ${file(config-${opt:stage}.yml):domain}
-        Stage: ${opt:stage}
-        RestApiId:
-          Ref: ApiGatewayRestApi
+# @TODO: restore pathmapping once it can be deployed reliably.
+#    pathmapping:
+#      Type: AWS::ApiGateway::BasePathMapping
+#      DependsOn:
+#        - ApiGatewayRestApi
+#      Properties:
+#        DomainName: ${file(config-${opt:stage}.yml):domain}
+#        Stage: ${opt:stage}
+#        RestApiId:
+#          Ref: ApiGatewayRestApi
     UserDB:
       Type: AWS::DynamoDB::Table
       Properties:

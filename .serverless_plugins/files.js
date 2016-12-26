@@ -3,6 +3,7 @@ const s3 = require('s3');
 class Files {
   constructor(serverless, options) {
     this.serverless = serverless;
+    this.options = options;
     this.provider = serverless.getProvider('aws');
     this.commands = {
       files: {
@@ -21,7 +22,7 @@ class Files {
       localDir: 'files',
       deleteRemoved: true,
       s3Params: {
-        Bucket: 'feedboostassets' + options.stage,
+        Bucket: 'feedboostassets' + this.options.stage,
         Prefix: ''
       }
     };

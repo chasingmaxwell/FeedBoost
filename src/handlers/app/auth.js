@@ -74,6 +74,12 @@ module.exports = (event, context, callback) => {
 
   // Try to create a corresponding user.
   .then((data) => {
+    let allowedUsers = process.env.ALLOWED_USERS || '';
+    allowedUsers = allowedUsers.split('|');
+    if (allowedUsers.indexOf(data.user.email) === -1) {
+      throw new Error('User is not allowed.');
+    }
+
     const user = {
       code: cryptr.encrypt(data.code),
       email: data.user.email

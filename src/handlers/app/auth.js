@@ -74,10 +74,13 @@ module.exports = (event, context, callback) => {
 
   // Try to create a corresponding user.
   .then((data) => {
-    let allowedUsers = process.env.ALLOWED_USERS || '';
-    allowedUsers = allowedUsers.split('|');
-    if (allowedUsers.indexOf(data.user.email) === -1) {
-      throw new Error('User is not allowed.');
+
+    // If the environment specifies a list of allowed users, make sure the
+    // current user is in it.
+    if (process.env.hasOwnProperty('ALLOWED_USERS')) {
+      if (process.env.ALLOWED_USERS.split('|').indexOf(data.user.email) === -1) {
+        throw new Error('User is not allowed.');
+      }
     }
 
     const user = {

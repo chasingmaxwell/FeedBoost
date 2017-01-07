@@ -210,7 +210,7 @@ module.exports = (event, context, callback) => {
         <footer id="page-footer">
           ${page.footer}
         </footer>
-        <script src="https://d1g5417jjjo7sf.cloudfront.net/reverb-embedded-sdk.js"/>
+        <script src="https://d1g5417jjjo7sf.cloudfront.net/reverb-embedded-sdk.js"></script>
         <script>ReverbEmbeddedSDK.init();</script>
       </body>
       </html>

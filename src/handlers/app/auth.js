@@ -89,16 +89,6 @@ module.exports = (event, context, callback) => {
     };
 
     return User.update(user)
-
-    // @TODO: is this still necessary?
-    .catch((err) => {
-      // The conditional check fails if the user already exists.
-      if (err.name !== 'ConditionalCheckFailedException') {
-        throw err;
-      }
-
-      return user;
-    });
   })
 
   // Redirect to the client.

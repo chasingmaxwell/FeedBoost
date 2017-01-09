@@ -14,7 +14,9 @@ module.exports = (email) => {
         return;
       }
 
-      resolve(data.Item)
+      let user = data.hasOwnProperty('Item') ? data.Item : null;
+
+      resolve(user)
     });
   });
 };

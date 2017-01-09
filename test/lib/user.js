@@ -73,6 +73,7 @@ describe('User', () => {
     })
   })
 
+  // @TODO: check the created and updated properties.
   describe('#update', () => {
     let user = {
       code: '123',
@@ -81,6 +82,7 @@ describe('User', () => {
     };
 
     it('should create a user', () => {
+      dbStubs.stubs.get.yields(null, {});
       dbStubs.stubs.update.yields();
       return User.update(user)
       .then((createdUser) => {
@@ -91,6 +93,7 @@ describe('User', () => {
     it('should report error messages', () => {
       let expectedErr = new Error('Danger!');
 
+      dbStubs.stubs.get.yields(null, {});
       dbStubs.stubs.update.yields(expectedErr);
 
       return User.update(user)

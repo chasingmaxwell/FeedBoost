@@ -2,34 +2,39 @@
   "name": "reverb-feedboost",
   "version": "1.0.0",
   "description": "Get notified when your Reverb.com feed updates within an hour!",
-  "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/istanbul cover --print both ./node_modules/.bin/_mocha test",
-    "lint": "eslint .",
-    "checkup": "npm run lint && npm run test",
-    "build": "rm -rf build && mkdir build && babel src -d build",
-    "deploy": "npm run checkup && npm run build && npm prune --production && sls deploy -s dev -v && sls -s dev files ; npm install",
-    "deploy-prod": "npm run checkup && npm run build && npm prune --production && sls deploy -s production -v && sls -s production files ; npm install"
+    "test": "jest --coverage",
+    "lint": "eslint --ignore-path .gitignore .",
+    "checkup": "yarn lint && yarn test",
+    "deploy": "yarn checkup && yarn sls deploy -s dev -v && yarn sls -s dev files",
+    "deploy-prod": "yarn checkup && yarn sls deploy -s production -v && yarn sls -s production files"
   },
   "dependencies": {
-    "aws-sdk": "^2.6.9",
     "cookie": "^0.3.1",
     "cryptr": "^2.0.0",
     "jsonwebtoken": "^7.1.9",
     "request": "^2.78.0",
     "request-promise": "^4.1.1",
     "s3": "^4.4.0",
+    "serverless": "^1.24.1",
     "uuid": "^2.0.3"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.6.9",
+    "eslint": "^4.12.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "jest": "^22.0.4"
+  },
+  "jest": {
+    "coverageDirectory": "__coverage__",
+    "testEnvironment": "node"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "babel-cli": "^6.16.0",
-    "babel-preset-latest": "^6.16.0",
-    "eslint": "^3.8.1",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.1.2",
-    "sinon": "^1.17.6"
+  "license": "MIT",
+  "private": true,
+  "publishConfig": {
+    "access": "restricted"
   }
 }

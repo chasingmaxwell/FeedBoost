@@ -1,10 +1,11 @@
-const AWS = require('aws-sdk');
+const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
+
 const db = new AWS.DynamoDB.DocumentClient();
 
 // @TODO: add test coverage.
-module.exports = ({index, query, values}) => {
-  let params = {
-    TableName: `feedboostUser_${process.env.NODE_ENV}`
+module.exports = ({ index, query, values }) => {
+  const params = {
+    TableName: `feedboostUser_${process.env.NODE_ENV}`,
   };
 
   if (typeof index !== 'undefined') {
@@ -31,7 +32,7 @@ module.exports = ({index, query, values}) => {
         return;
       }
 
-      resolve(data.Items)
+      resolve(data.Items);
     });
   });
 };

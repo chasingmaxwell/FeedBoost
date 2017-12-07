@@ -1,7 +1,13 @@
+const home = require('./home.js');
+const subscribe = require('./subscribe.js');
+const unsubscribe = require('./unsubscribe.js');
+const auth = require('./auth.js');
+const logout = require('./logout.js');
+
 module.exports = {
-  home: require('./home.js'),
-  subscribe: require('./subscribe.js'),
-  unsubscribe: require('./unsubscribe.js'),
-  auth: require('./auth.js'),
-  logout: require('./logout.js')
+  home,
+  subscribe,
+  unsubscribe,
+  auth,
+  logout,
 };

@@ -1,11 +1,12 @@
-const AWS = require('aws-sdk');
+const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
+const { Readable } = require('stream');
+
 const db = new AWS.DynamoDB.DocumentClient();
-const Readable = require('stream').Readable;
 
 // @TODO: add test coverage.
-module.exports = ({index, query, values} = {index: null, query: null, values: null}) => {
-  let params = {
-    TableName: `feedboostUser_${process.env.NODE_ENV}`
+module.exports = ({ index, query, values } = { index: null, query: null, values: null }) => {
+  const params = {
+    TableName: `feedboostUser_${process.env.NODE_ENV}`,
   };
 
   if (typeof index !== 'undefined') {
@@ -31,15 +32,17 @@ module.exports = ({index, query, values} = {index: null, query: null, values: nu
       }
 
       if (end) {
-        return this.push(null);
+        this.push(null);
+        return;
       }
 
       db.scan(params, (err, data) => {
         if (err) {
-          return this.emit('error', err);
+          this.emit('error', err);
+          return;
         }
 
-        if (data.hasOwnProperty('LastEvaluatedKey')) {
+        if (typeof data.LastEvaluatedKey !== 'undefined') {
           lastKey = data.LastEvaluatedKey;
         }
         else {
@@ -48,6 +51,6 @@ module.exports = ({index, query, values} = {index: null, query: null, values: nu
 
         this.push(data.Items);
       });
-    }
+    },
   });
 };

@@ -1,9 +1,17 @@
+const update = require('./update');
+const deleteUser = require('./delete');
+const get = require('./get');
+const getFromToken = require('./getFromToken');
+const query = require('./query');
+const scan = require('./scan');
+const validate = require('./validate');
+
 module.exports = {
-  update: require('./update.js'),
-  delete: require('./delete.js'),
-  get: require('./get.js'),
-  getFromToken: require('./getFromToken.js'),
-  query: require('./query.js'),
-  scan: require('./scan.js'),
-  validate: require('./validate.js')
-}
+  update,
+  delete: deleteUser,
+  get,
+  getFromToken,
+  query,
+  scan,
+  validate,
+};

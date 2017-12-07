@@ -1,7 +1,6 @@
 .serverless
-build
 node_modules
-coverage
+__coverage__
 .env
 files/*
 !files/.gitkeep

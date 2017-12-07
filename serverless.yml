@@ -1,9 +1,11 @@
 service: reverb-feedboost
+
 plugins:
   - files
+
 provider:
   name: aws
-  runtime: nodejs4.3
+  runtime: nodejs6.10
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -25,17 +27,18 @@ provider:
         - "ses:SendEmail"
       Resource:
         - "arn:aws:ses:us-east-1:*:identity/*"
+
 functions:
   apphome:
     environment: ${file(config-${opt:stage}.yml):variables}
-    handler: build/handlers/app.home
+    handler: src/handlers/app.home
     events:
       - http:
           path: /
           method: get
   appsub:
     environment: ${file(config-${opt:stage}.yml):variables}
-    handler: build/handlers/app.subscribe
+    handler: src/handlers/app.subscribe
     events:
       - http:
           path: subscribe
@@ -45,28 +48,28 @@ functions:
           method: get
   appunsub:
     environment: ${file(config-${opt:stage}.yml):variables}
-    handler: build/handlers/app.unsubscribe
+    handler: src/handlers/app.unsubscribe
     events:
       - http:
           path: unsubscribe/{hash}
           method: post
   appauth:
     environment: ${file(config-${opt:stage}.yml):variables}
-    handler: build/handlers/app.auth
+    handler: src/handlers/app.auth
     events:
       - http:
           path: subscribe/success
           method: get
   logout:
     environment: ${file(config-${opt:stage}.yml):variables}
-    handler: build/handlers/app.logout
+    handler: src/handlers/app.logout
     events:
       - http:
           path: logout
           method: get
   feedcheck:
     environment: ${file(config-${opt:stage}.yml):variables}
-    handler: build/handlers/feed.check
+    handler: src/handlers/feed.check
     events:
       - schedule: rate(1 hour)
 resources:
@@ -100,14 +103,14 @@ resources:
             AttributeName: code
             AttributeType: S
         KeySchema:
-          - 
+          -
             AttributeName: email
             KeyType: HASH
         GlobalSecondaryIndexes:
-          - 
+          -
             IndexName: code
             KeySchema:
-              - 
+              -
                 AttributeName: code
                 KeyType: HASH
             Projection:
@@ -118,10 +121,13 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
 package:
+  excludeDevDependencies: false
   exclude:
-    - '*'
-    - '**'
-    - '!build/**/*'
-    - '!node_modules/**/*'
-    - '!package.json'
+    - '.*'
+    - '**/*.swp'
+    - '__tests__/**'
+    - '__coverage__/**'
+    - 'yarn.lock'
+    - 'README.md'

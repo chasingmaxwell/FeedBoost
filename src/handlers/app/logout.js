@@ -5,12 +5,12 @@ module.exports = (event, context, callback) => {
     statusCode: 302,
     body: '',
     headers: {
-      'Location': process.env.BASE_URI,
+      Location: process.env.BASE_URI,
       'Set-Cookie': cookie.serialize('rtoken', 'deleted', {
         httpOnly: true,
         maxAge: -1,
-        path: '/'
-      })
-    }
+        path: '/',
+      }),
+    },
   });
 };

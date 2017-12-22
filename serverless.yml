@@ -1,9 +1,29 @@
 service: reverb-feedboost
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+
 plugins:
   - files
+
 provider:
   name: aws
-  runtime: nodejs4.3
+  runtime: nodejs6.10
+  stage: dev
+  region: us-east-1
+  environment:
+    APP_NAME: FeedBoost
+    NODE_ENV: ${self:custom.stage}
+    APP_EMAIL: ${env:APP_EMAIL_${self:custom.stage}}
+    REVERB_HOST: ${env:REVERB_HOST_${self:custom.stage}}
+    REVERB_KEY: ${env:REVERB_KEY_${self:custom.stage}}
+    REVERB_SECRET: ${env:REVERB_SECRET_${self:custom.stage}}
+    REVERB_REDIRECT: ${env:REVERB_REDIRECT_${self:custom.stage}}
+    FILES_URL: ${env:FILES_URL_${self:custom.stage}}
+    BASE_URI: ${env:BASE_URI_${self:custom.stage}}
+    JWT_SECRET: ${env:JWT_SECRET_${self:custom.stage}}
+    CRYPTR_KEY: ${env:CRYPTR_KEY_${self:custom.stage}}
+    ALLOWED_USERS_dev: ${env:ALLOWED_USERS_dev}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -25,17 +45,16 @@ provider:
         - "ses:SendEmail"
       Resource:
         - "arn:aws:ses:us-east-1:*:identity/*"
+
 functions:
   apphome:
-    environment: ${file(config-${opt:stage}.yml):variables}
-    handler: build/handlers/app.home
+    handler: src/handlers/app.home
     events:
       - http:
           path: /
           method: get
   appsub:
-    environment: ${file(config-${opt:stage}.yml):variables}
-    handler: build/handlers/app.subscribe
+    handler: src/handlers/app.subscribe
     events:
       - http:
           path: subscribe
@@ -44,29 +63,25 @@ functions:
           path: login
           method: get
   appunsub:
-    environment: ${file(config-${opt:stage}.yml):variables}
-    handler: build/handlers/app.unsubscribe
+    handler: src/handlers/app.unsubscribe
     events:
       - http:
           path: unsubscribe/{hash}
           method: post
   appauth:
-    environment: ${file(config-${opt:stage}.yml):variables}
-    handler: build/handlers/app.auth
+    handler: src/handlers/app.auth
     events:
       - http:
           path: subscribe/success
           method: get
   logout:
-    environment: ${file(config-${opt:stage}.yml):variables}
-    handler: build/handlers/app.logout
+    handler: src/handlers/app.logout
     events:
       - http:
           path: logout
           method: get
   feedcheck:
-    environment: ${file(config-${opt:stage}.yml):variables}
-    handler: build/handlers/feed.check
+    handler: src/handlers/feed.check
     events:
       - schedule: rate(1 hour)
 resources:
@@ -100,14 +115,14 @@ resources:
             AttributeName: code
             AttributeType: S
         KeySchema:
-          - 
+          -
             AttributeName: email
             KeyType: HASH
         GlobalSecondaryIndexes:
-          - 
+          -
             IndexName: code
             KeySchema:
-              - 
+              -
                 AttributeName: code
                 KeyType: HASH
             Projection:
@@ -118,10 +133,13 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
 package:
+  excludeDevDependencies: false
   exclude:
-    - '*'
-    - '**'
-    - '!build/**/*'
-    - '!node_modules/**/*'
-    - '!package.json'
+    - '.*'
+    - '**/*.swp'
+    - '__tests__/**'
+    - '__coverage__/**'
+    - 'yarn.lock'
+    - 'README.md'

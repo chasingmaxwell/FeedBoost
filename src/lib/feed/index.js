@@ -1,3 +1,5 @@
+const get = require('./get');
+
 module.exports = {
-  get: require('./get.js'),
+  get,
 };

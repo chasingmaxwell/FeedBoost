@@ -2,34 +2,60 @@
   "name": "reverb-feedboost",
   "version": "1.0.0",
   "description": "Get notified when your Reverb.com feed updates within an hour!",
-  "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/istanbul cover --print both ./node_modules/.bin/_mocha test",
-    "lint": "eslint .",
-    "checkup": "npm run lint && npm run test",
-    "build": "rm -rf build && mkdir build && babel src -d build",
-    "deploy": "npm run checkup && npm run build && npm prune --production && sls deploy -s dev -v && sls -s dev files ; npm install",
-    "deploy-prod": "npm run checkup && npm run build && npm prune --production && sls deploy -s production -v && sls -s production files ; npm install"
+    "test": "jest --coverage",
+    "debug-test": "node --inspect --debug-brk ./node_modules/.bin/jest --runInBand --env jest-environment-node-debug",
+    "lint": "eslint --ignore-path .gitignore .",
+    "precommit": "yarn lint",
+    "prepush": "yarn test",
+    "commitmsg": "commitlint -e $GIT_PARAMS",
+    "sls": "sls",
+    "semantic-release": "semantic-release pre && semantic-release post"
   },
   "dependencies": {
-    "aws-sdk": "^2.6.9",
     "cookie": "^0.3.1",
     "cryptr": "^2.0.0",
     "jsonwebtoken": "^7.1.9",
     "request": "^2.78.0",
     "request-promise": "^4.1.1",
     "s3": "^4.4.0",
+    "serverless": "^1.25.0",
     "uuid": "^2.0.3"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.16.0",
-    "babel-preset-latest": "^6.16.0",
-    "eslint": "^3.8.1",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.1.2",
-    "sinon": "^1.17.6"
+    "@commitlint/cli": "^5.2.6",
+    "@commitlint/config-conventional": "^5.2.3",
+    "aws-sdk": "^2.6.9",
+    "condition-noop": "^1.0.0",
+    "eslint": "^4.12.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "husky": "^0.14.3",
+    "jest": "^22.0.4",
+    "jest-environment-node-debug": "^2.0.0",
+    "last-release-git": "^0.0.3",
+    "semantic-release": "^11.0.2",
+    "semantic-release-conventional-commits": "^1.2.0"
+  },
+  "jest": {
+    "coverageDirectory": "__coverage__",
+    "testEnvironment": "node"
+  },
+  "release": {
+    "analyzeCommits": "semantic-release-conventional-commits",
+    "getLastRelease": "last-release-git",
+    "verifyConditions": "condition-noop"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "keywords": [],
+  "author": "Peter Sieg <chasingmaxwell@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "publishConfig": {
+    "access": "restricted"
   }
 }

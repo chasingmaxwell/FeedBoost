@@ -1,3 +1,5 @@
+const check = require('./check.js');
+
 module.exports = {
-  check: require('./check.js')
+  check,
 };

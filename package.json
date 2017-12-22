@@ -5,6 +5,9 @@
   "scripts": {
     "test": "jest --coverage",
     "lint": "eslint --ignore-path .gitignore .",
+    "precommit": "yarn lint",
+    "prepush": "yarn test",
+    "commitmsg": "commitlint -e $GIT_PARAMS",
     "sls": "sls",
     "semantic-release": "semantic-release pre && semantic-release post"
   },
@@ -19,11 +22,14 @@
     "uuid": "^2.0.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^5.2.6",
+    "@commitlint/config-conventional": "^5.2.3",
     "aws-sdk": "^2.6.9",
     "condition-noop": "^1.0.0",
     "eslint": "^4.12.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
+    "husky": "^0.14.3",
     "jest": "^22.0.4",
     "last-release-git": "^0.0.3",
     "semantic-release": "^11.0.2",
@@ -37,6 +43,11 @@
     "analyzeCommits": "semantic-release-conventional-commits",
     "getLastRelease": "last-release-git",
     "verifyConditions": "condition-noop"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
   "keywords": [],
   "author": "Peter Sieg <chasingmaxwell@gmail.com>",

@@ -1,7 +1,3 @@
 .serverless
 node_modules
 __coverage__
-.env
-files/*
-!files/.gitkeep
-config-*

@@ -15,6 +15,7 @@ describe('User', () => {
     jest.spyOn(DocumentClient.prototype, 'get').mockImplementation((params, cb) => cb(null, {}));
     jest.spyOn(DocumentClient.prototype, 'update').mockImplementation((params, cb) => cb());
     jest.spyOn(DocumentClient.prototype, 'delete').mockImplementation((params, cb) => cb());
+    jest.spyOn(Date.prototype, 'toISOString').mockReturnValue('now');
   });
 
   afterEach(() => {
@@ -74,7 +75,6 @@ describe('User', () => {
     });
   });
 
-  // @TODO: check the created and updated properties.
   describe('#update', () => {
     const user = {
       code: '123',
@@ -86,7 +86,7 @@ describe('User', () => {
       expect.assertions(1);
       return User.update(user)
         .then((createdUser) => {
-          expect(user).toEqual(createdUser);
+          expect(createdUser).toEqual(Object.assign({ created: 'now', updated: 'now' }, user));
         });
     });
 

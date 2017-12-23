@@ -5,6 +5,7 @@ custom:
 
 plugins:
   - files
+  - serverless-offline
 
 provider:
   name: aws

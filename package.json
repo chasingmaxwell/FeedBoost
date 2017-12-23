@@ -10,7 +10,8 @@
     "prepush": "yarn test",
     "commitmsg": "commitlint -e $GIT_PARAMS",
     "sls": "sls",
-    "semantic-release": "semantic-release pre && semantic-release post"
+    "semantic-release": "semantic-release pre && semantic-release post",
+    "start": "sls offline start"
   },
   "dependencies": {
     "cookie": "^0.3.1",
@@ -35,7 +36,8 @@
     "jest-environment-node-debug": "^2.0.0",
     "last-release-git": "^0.0.3",
     "semantic-release": "^8.0.0",
-    "semantic-release-conventional-commits": "^1.2.0"
+    "semantic-release-conventional-commits": "^1.2.0",
+    "serverless-offline": "^3.16.0"
   },
   "jest": {
     "coverageDirectory": "__coverage__",

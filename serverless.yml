@@ -18,7 +18,7 @@ provider:
     REVERB_HOST: ${env:REVERB_HOST_${self:custom.stage}}
     REVERB_KEY: ${env:REVERB_KEY_${self:custom.stage}}
     REVERB_SECRET: ${env:REVERB_SECRET_${self:custom.stage}}
-    REVERB_REDIRECT: ${env:REVERB_REDIRECT_${self:custom.stage}}
+    REVERB_REDIRECT_URI: ${env:REVERB_REDIRECT_URI_${self:custom.stage}}
     FILES_URL: ${env:FILES_URL_${self:custom.stage}}
     BASE_URI: ${env:BASE_URI_${self:custom.stage}}
     JWT_SECRET: ${env:JWT_SECRET_${self:custom.stage}}

@@ -21,6 +21,7 @@
     "request-promise": "^4.1.1",
     "s3": "^4.4.0",
     "serverless": "^1.25.0",
+    "serverless-offline": "^3.16.0",
     "uuid": "^2.0.3"
   },
   "devDependencies": {
@@ -36,8 +37,7 @@
     "jest-environment-node-debug": "^2.0.0",
     "last-release-git": "^0.0.3",
     "semantic-release": "^8.0.0",
-    "semantic-release-conventional-commits": "^1.2.0",
-    "serverless-offline": "^3.16.0"
+    "semantic-release-conventional-commits": "^1.2.0"
   },
   "jest": {
     "coverageDirectory": "__coverage__",

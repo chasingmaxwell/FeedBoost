@@ -9,6 +9,9 @@ before_install:
 script:
   - yarn lint
   - yarn test
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
 
 stages:
   - name: test

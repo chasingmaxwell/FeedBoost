@@ -1,6 +1,6 @@
 {
   "name": "reverb-feedboost",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "Get notified when your Reverb.com feed updates within an hour!",
   "scripts": {
     "test": "jest --coverage",
@@ -57,5 +57,13 @@
   "private": true,
   "publishConfig": {
     "access": "restricted"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chasingmaxwell/FeedBoost.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chasingmaxwell/FeedBoost/issues"
+  },
+  "homepage": "https://github.com/chasingmaxwell/FeedBoost#readme"
 }

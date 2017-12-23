@@ -15,7 +15,8 @@ function sign(code) {
 }
 
 function getFromCookie(string) {
-  return Promise.resolve(verify(cookie.parse(string).rtoken || ''));
+  return Promise.resolve()
+    .then(() => verify(cookie.parse(string).rtoken || ''));
 }
 
 module.exports = {

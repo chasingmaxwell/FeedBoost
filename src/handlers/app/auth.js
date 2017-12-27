@@ -25,7 +25,7 @@ module.exports = (event, context, callback) => {
     // Check for a valid state parameter.
     const state = Token.verify(event.queryStringParameters.state);
     if (state !== reverbKey) {
-      reject(new Error('The state parmater did not match.'));
+      reject(new Error('The state parameter did not match.'));
       return;
     }
     resolve();
@@ -114,7 +114,7 @@ module.exports = (event, context, callback) => {
 
     // Uh-oh. Something went wrong.
     .catch((err) => {
-      console.error(err);
+      console.error(JSON.stringify(err));
 
       callback(null, {
         statusCode: 302,

@@ -11,13 +11,16 @@
     "commitmsg": "commitlint -e $GIT_PARAMS",
     "sls": "sls",
     "semantic-release": "semantic-release pre && semantic-release post",
-    "start": "sls offline start"
+    "start": "sls offline start",
+    "debug": "node --inspect ./node_modules/.bin/sls offline start",
+    "debug-invoke": "node --inspect --debug-brk ./node_modules/.bin/sls invoke"
   },
   "dependencies": {
     "config": "^1.29.0",
     "cookie": "^0.3.1",
     "cryptr": "^2.0.0",
     "jsonwebtoken": "^7.1.9",
+    "lodash": "^4.17.4",
     "request": "^2.78.0",
     "request-promise": "^4.1.1",
     "s3": "^4.4.0",

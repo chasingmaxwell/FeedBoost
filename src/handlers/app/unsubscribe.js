@@ -1,8 +1,11 @@
+const config = require('config');
 const User = require('../../lib/user');
 const Cryptr = require('cryptr');
 
+const cryptrKey = config.get('app.cryptrKey');
+
 module.exports = (event, context, callback) => {
-  const cryptr = new Cryptr(process.env.CRYPTR_KEY);
+  const cryptr = new Cryptr(cryptrKey);
   const email = cryptr.decrypt(decodeURIComponent(event.pathParameters.hash));
 
   return User.delete(email)

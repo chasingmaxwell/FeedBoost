@@ -1,5 +1,15 @@
+const config = require('config');
 const User = require('../../lib/user');
 const Token = require('../../lib/token');
+
+const {
+  name: appName,
+  baseUri,
+  filesUrl,
+} = config.get('app');
+const {
+  host: reverbHost,
+} = config.get('reverb');
 
 module.exports = (event, context, callback) => {
   let cookieString = '';
@@ -35,11 +45,11 @@ module.exports = (event, context, callback) => {
       page.content = `
         <h2>Hi, ${user.email}!</h2>
         <p>You've subscribed to receive email notifications when new items appear in your feed.</p>
-        <p class="cta"><a href="${process.env.REVERB_HOST}/my/feed" target="_blank">Take me to my feed!</a></p>
+        <p class="cta"><a href="${reverbHost}/my/feed" target="_blank">Take me to my feed!</a></p>
       `;
       page.footer = `
-        <p>Would you like to stop receiving notifications? Uninstall FeedBoost from your <a href="${process.env.REVERB_HOST}/apps/installed" target="_blank">apps dashboard</a> on Reverb.com.</p>
-        <p>Not ${user.email}? <a href="${process.env.BASE_URI}/logout">Log out</a>.
+        <p>Would you like to stop receiving notifications? Uninstall FeedBoost from your <a href="${reverbHost}/apps/installed" target="_blank">apps dashboard</a> on Reverb.com.</p>
+        <p>Not ${user.email}? <a href="${baseUri}/logout">Log out</a>.
       `;
     })
 
@@ -47,12 +57,12 @@ module.exports = (event, context, callback) => {
     .catch(() => {
       page.content = `
         <h2>Ditch the delay in your Reverb.com feed!</h2>
-        <p>Ever missed out on some rockin' gear because you didn't receive the feed notification in time? That gear gets snatched up quick! ${process.env.APP_NAME} boosts the signal of your Reverb.com feed by ditching the delay and notifying you of changes to your feed within one hour.</p>
-        <p class="cta"><a href="${process.env.BASE_URI}/subscribe">Boost my feed!</a></p>
+        <p>Ever missed out on some rockin' gear because you didn't receive the feed notification in time? That gear gets snatched up quick! ${appName} boosts the signal of your Reverb.com feed by ditching the delay and notifying you of changes to your feed within one hour.</p>
+        <p class="cta"><a href="${baseUri}/subscribe">Boost my feed!</a></p>
       `;
       page.footer = `
-        <p>Already subscribed? <a href="${process.env.BASE_URI}/login">Log in</a> to manage your preferences.</p>
-        <p><a href="${process.env.BASE_URI}/subscribe">Subscribe now</a> to start recieving notifications from your feed!</p>
+        <p>Already subscribed? <a href="${baseUri}/login">Log in</a> to manage your preferences.</p>
+        <p><a href="${baseUri}/subscribe">Subscribe now</a> to start recieving notifications from your feed!</p>
       `;
     })
 
@@ -67,7 +77,7 @@ module.exports = (event, context, callback) => {
         <!doctype html>
         <html>
         <head>
-          <title>${process.env.APP_NAME}</title>
+          <title>${appName}</title>
           <meta name="viewport" content="width=device-width" />
           <link href="https://fonts.googleapis.com/css?family=Yesteryear" rel="stylesheet">
           <style type="text/css">
@@ -200,7 +210,7 @@ module.exports = (event, context, callback) => {
           <header id="page-header">
             ${successMessage}
             ${errorMessage}
-            <object id="logo" type="image/svg+xml" data="${process.env.FILES_URL}/logo.svg"><h1 class="fallback">${process.env.APP_NAME}</h1></object>
+            <object id="logo" type="image/svg+xml" data="${filesUrl}/logo.svg"><h1 class="fallback">${appName}</h1></object>
           </header>
           <section id="page-content">
             ${page.content}

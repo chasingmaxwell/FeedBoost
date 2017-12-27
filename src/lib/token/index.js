@@ -1,9 +1,12 @@
+const config = require('config');
 const cookie = require('cookie');
 const jwt = require('jsonwebtoken');
 
+const jwtSecret = config.get('app.jwtSecret');
+
 function verify(token) {
   try {
-    return jwt.verify(token, process.env.JWT_SECRET).code;
+    return jwt.verify(token, jwtSecret).code;
   }
   catch (e) {
     throw new Error('Token invalid.');
@@ -11,7 +14,7 @@ function verify(token) {
 }
 
 function sign(code) {
-  return jwt.sign({ code }, process.env.JWT_SECRET);
+  return jwt.sign({ code }, jwtSecret);
 }
 
 function getFromCookie(string) {

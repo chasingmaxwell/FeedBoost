@@ -24,7 +24,7 @@ provider:
     BASE_URI: ${env:BASE_URI_${self:custom.stage}}
     JWT_SECRET: ${env:JWT_SECRET_${self:custom.stage}}
     CRYPTR_KEY: ${env:CRYPTR_KEY_${self:custom.stage}}
-    ALLOWED_USERS_dev: ${env:ALLOWED_USERS_dev}
+    ALLOWED_USERS: ${env:ALLOWED_USERS_${self:custom.stage}}
   iamRoleStatements:
     - Effect: "Allow"
       Action:

@@ -1,5 +1,15 @@
+const config = require('config');
 const Token = require('../../lib/token');
 const User = require('../../lib/user');
+
+const {
+  host: reverbHost,
+  key: reverbKey,
+  redirectPath,
+} = config.get('reverb');
+const {
+  baseUri,
+} = config.get('app');
 
 module.exports = (event, context, callback) => {
   const cookieString = typeof event.headersCookie !== 'undefined'
@@ -18,18 +28,18 @@ module.exports = (event, context, callback) => {
         statusCode: 302,
         body: '',
         headers: {
-          Location: process.env.BASE_URI,
+          Location: baseUri,
         },
       });
     })
 
     .catch(() => {
-      const state = Token.sign(process.env.REVERB_KEY);
+      const state = Token.sign(reverbKey);
       callback(null, {
         statusCode: 302,
         body: '',
         headers: {
-          Location: `${process.env.REVERB_HOST}/oauth/authorize?client_id=${process.env.REVERB_KEY}&redirect_uri=${process.env.REVERB_REDIRECT_URI}&response_type=code&scope=read_lists+read_profile&state=${state}`,
+          Location: `${reverbHost}/oauth/authorize?client_id=${reverbKey}&redirect_uri=${baseUri}${redirectPath}&response_type=code&scope=read_lists+read_profile&state=${state}`,
         },
       });
     });

@@ -1,11 +1,15 @@
+const config = require('config');
 const request = require('request-promise');
 const Cryptr = require('cryptr');
 
+const cryptrKey = config.get('app.cryptrKey');
+const reverbHost = config.get('reverb.host');
+
 module.exports = (user) => {
-  const cryptr = new Cryptr(process.env.CRYPTR_KEY);
+  const cryptr = new Cryptr(cryptrKey);
   const code = cryptr.decrypt(user.code);
   return request({
-    uri: `${process.env.REVERB_HOST}/api/my/feed`,
+    uri: `${reverbHost}/api/my/feed`,
     method: 'get',
     json: true,
     headers: {

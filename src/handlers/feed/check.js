@@ -1,6 +1,14 @@
+const config = require('config');
 const User = require('../../lib/user');
 const Feed = require('../../lib/feed');
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
+
+const {
+  name: appName,
+  email: appEmail,
+  filesUrl,
+} = config.get('app');
+const reverbHost = config.get('reverb.host');
 
 const ses = new AWS.SES();
 
@@ -53,7 +61,7 @@ module.exports = (event, context, callback) => new Promise((resolve) => {
                     <head>
                       <meta name="viewport" content="width=device-width" />
                       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-                      <title>${process.env.APP_NAME} Notification</title>
+                      <title>${appName} Notification</title>
                       <link href="https://fonts.googleapis.com/css?family=Yesteryear" rel="stylesheet">
                       <style type="text/css">
                         a {
@@ -69,7 +77,7 @@ module.exports = (event, context, callback) => new Promise((resolve) => {
                       <table border="0" cellpadding="0" cellspacing="0">
                         <tr>
                           <td style="padding: 20px 0;">
-                            <img src="${process.env.FILES_URL}/logo.png" title="FeedBoost" alt="FeedBoost Logo" width="147" height="38" />
+                            <img src="${filesUrl}/logo.png" title="FeedBoost" alt="FeedBoost Logo" width="147" height="38" />
                           </td>
                         </tr>
                         <tr>
@@ -77,11 +85,11 @@ module.exports = (event, context, callback) => new Promise((resolve) => {
                             <p>Hello ${user.email},</p>
                             <p>Your feed just updated! Here's the new gear:</p>
                             ${matchMarkup}
-                            <p><a href="${process.env.REVERB_HOST}/my/feed" style="color: #0080a5;">Take me to my feed!</a></p>
+                            <p><a href="${reverbHost}/my/feed" style="color: #0080a5;">Take me to my feed!</a></p>
                           </td>
                         </tr>
                         <tr>
-                          <td style="font-size: 12px; color: #888;">Prefer not to receive notifications about new items in your feed? Uninstall FeedBoost from your <a href="${process.env.REVERB_HOST}/apps/installed" style="color: #0080a5;">apps dashboard</a> on Reverb.com.</td>
+                          <td style="font-size: 12px; color: #888;">Prefer not to receive notifications about new items in your feed? Uninstall FeedBoost from your <a href="${reverbHost}/apps/installed" style="color: #0080a5;">apps dashboard</a> on Reverb.com.</td>
                         </tr>
                       </table>
                     </body>
@@ -93,7 +101,7 @@ module.exports = (event, context, callback) => new Promise((resolve) => {
                 Data: 'Your feed updated!',
               },
             },
-            Source: `${process.env.APP_NAME} <${process.env.APP_EMAIL}>`,
+            Source: `${appName} <${appEmail}>`,
           }, (err) => {
             if (err) {
               _reject(err);

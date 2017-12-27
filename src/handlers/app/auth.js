@@ -1,16 +1,30 @@
+const config = require('config');
 const request = require('request-promise');
 const cookie = require('cookie');
 const User = require('../../lib/user');
 const Token = require('../../lib/token');
 const Cryptr = require('cryptr');
 
+const {
+  cryptrKey,
+  baseUri,
+  allowedUsers,
+  email: appEmail,
+} = config.get('app');
+const {
+  host: reverbHost,
+  key: reverbKey,
+  secret: reverbSecret,
+  redirectPath,
+} = config.get('reverb');
+
 module.exports = (event, context, callback) => {
-  const cryptr = new Cryptr(process.env.CRYPTR_KEY);
+  const cryptr = new Cryptr(cryptrKey);
 
   return new Promise((resolve, reject) => {
     // Check for a valid state parameter.
     const state = Token.verify(event.queryStringParameters.state);
-    if (state !== process.env.REVERB_KEY) {
+    if (state !== reverbKey) {
       reject(new Error('The state parmater did not match.'));
       return;
     }
@@ -19,21 +33,21 @@ module.exports = (event, context, callback) => {
 
     // Request access token from Reverb.
     .then(() => request({
-      uri: `${process.env.REVERB_HOST}/oauth/token`,
+      uri: `${reverbHost}/oauth/token`,
       method: 'post',
       json: true,
       qs: {
-        client_id: process.env.REVERB_KEY,
-        client_secret: process.env.REVERB_SECRET,
+        client_id: reverbKey,
+        client_secret: reverbSecret,
         code: event.queryStringParameters.code,
         grant_type: 'authorization_code',
-        redirect_uri: process.env.REVERB_REDIRECT_URI,
+        redirect_uri: `${baseUri}${redirectPath}`,
       },
     }))
 
     // Get user data from Reverb.
     .then(data => request({
-      uri: `${process.env.REVERB_HOST}/api/my/account`,
+      uri: `${reverbHost}/api/my/account`,
       json: true,
       headers: {
         Authorization: `Bearer ${data.access_token}`,
@@ -46,7 +60,7 @@ module.exports = (event, context, callback) => {
 
     // Register for the app uninstall webhook.
     .then(data => request({
-      uri: `${process.env.REVERB_HOST}/api/webhooks/registrations`,
+      uri: `${reverbHost}/api/webhooks/registrations`,
       method: 'post',
       json: true,
       headers: {
@@ -54,7 +68,7 @@ module.exports = (event, context, callback) => {
         'Content-Type': 'application/hal+json',
       },
       body: {
-        url: `${process.env.BASE_URI}/unsubscribe/${encodeURIComponent(cryptr.encrypt(data.user.email))}`,
+        url: `${baseUri}/unsubscribe/${encodeURIComponent(cryptr.encrypt(data.user.email))}`,
         topic: 'app/uninstalled',
       },
     })
@@ -64,8 +78,8 @@ module.exports = (event, context, callback) => {
     .then((data) => {
       // If the environment specifies a list of allowed users, make sure the
       // current user is in it.
-      if (typeof process.env.ALLOWED_USERS !== 'undefined') {
-        if (process.env.ALLOWED_USERS.split('|').indexOf(data.user.email) === -1) {
+      if (typeof allowedUsers !== 'undefined') {
+        if (allowedUsers.split('|').indexOf(data.user.email) === -1) {
           throw new Error('User is not allowed.');
         }
       }
@@ -93,7 +107,7 @@ module.exports = (event, context, callback) => {
         body: '',
         headers: {
           'Set-Cookie': cookieString,
-          Location: process.env.BASE_URI,
+          Location: baseUri,
         },
       });
     })
@@ -106,7 +120,7 @@ module.exports = (event, context, callback) => {
         statusCode: 302,
         body: '',
         headers: {
-          Location: `${process.env.BASE_URI}?errorMessage=Oops!+We+were+unable+to+authenticate+with+your+reverb+account.+If+you+continue+to+have+trouble,+please+contact+peter@feedboost.rocks+for+help.`,
+          Location: `${baseUri}?errorMessage=Oops!+We+were+unable+to+authenticate+with+your+reverb+account.+If+you+continue+to+have+trouble,+please+contact+${appEmail}+for+help.`,
           'Set-Cookie': cookie.serialize('rtoken', 'deleted', {
             httpOnly: true,
             maxAge: -1,

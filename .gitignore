@@ -3,4 +3,4 @@ node_modules
 __coverage__
 .vscode
 config/*
-!config/default.yml
+!config/default.*

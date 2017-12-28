@@ -166,8 +166,8 @@ module.exports = (event, context, callback) => new Promise((resolve) => {
 
       console.info(JSON.stringify(results));
 
-      if (errors) {
-        callback(errors);
+      if (errors.length > 0) {
+        callback(new Error(JSON.stringify(errors)));
       }
       else {
         callback(null, results);

@@ -9,7 +9,6 @@
     "precommit": "yarn lint",
     "prepush": "yarn test",
     "commitmsg": "commitlint -e $GIT_PARAMS",
-    "sls": "sls",
     "semantic-release": "semantic-release pre && semantic-release post",
     "start": "sls offline start",
     "debug": "node --inspect ./node_modules/.bin/sls offline start",

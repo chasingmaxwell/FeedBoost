@@ -6,12 +6,10 @@ notifications:
   email: false
 before_install:
   - git fetch --tags
-script:
-  - yarn lint
-  - yarn test
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
+node_js: '8.10'
 
 stages:
   - name: test
@@ -27,24 +25,19 @@ stages:
 jobs:
   include:
     - stage: test
-      node_js: 'lts/boron'
-
-    - stage: test
-      node_js: 'lts/carbon'
+      script:
+        - yarn lint
+        - yarn test
 
     - stage: deploy-dev
-      # Semantic release will fail if it's not using node 8.
-      node_js: 'lts/carbon'
       script: yarn semantic-release
 
     - stage: deploy-dev
-      node_js: 'lts/boron'
       script:
         - yarn --production
         - yarn sls deploy -s dev -v && yarn sls -s dev files
 
     - stage: deploy-prod
-      node_js: 'lts/boron'
       script:
         - yarn --production
         - yarn sls deploy -s production -v && yarn sls -s production files

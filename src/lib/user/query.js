@@ -15,8 +15,7 @@ module.exports = ({ index, query, values }) => {
   if (typeof query !== 'undefined') {
     if (typeof query === 'string') {
       params.KeyConditionExpression = query;
-    }
-    else if (typeof query === 'object') {
+    } else if (typeof query === 'object') {
       params.KeyConditions = query;
     }
   }

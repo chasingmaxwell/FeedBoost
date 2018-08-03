@@ -7,14 +7,22 @@ jest.mock('aws-sdk', () => ({
     },
   },
 }));
-const { DynamoDB: { DocumentClient } } = require('aws-sdk');
+const {
+  DynamoDB: { DocumentClient },
+} = require('aws-sdk');
 const User = require('./');
 
 describe('User', () => {
   beforeEach(() => {
-    jest.spyOn(DocumentClient.prototype, 'get').mockImplementation((params, cb) => cb(null, {}));
-    jest.spyOn(DocumentClient.prototype, 'update').mockImplementation((params, cb) => cb());
-    jest.spyOn(DocumentClient.prototype, 'delete').mockImplementation((params, cb) => cb());
+    jest
+      .spyOn(DocumentClient.prototype, 'get')
+      .mockImplementation((params, cb) => cb(null, {}));
+    jest
+      .spyOn(DocumentClient.prototype, 'update')
+      .mockImplementation((params, cb) => cb());
+    jest
+      .spyOn(DocumentClient.prototype, 'delete')
+      .mockImplementation((params, cb) => cb());
     jest.spyOn(Date.prototype, 'toISOString').mockReturnValue('now');
   });
 
@@ -28,24 +36,19 @@ describe('User', () => {
       return User.validate({
         code: '123',
         email: 'test@example.com',
-        listings: [
-          '123',
-          '456',
-        ],
-      })
-        .then(() => {
-          expect(true).toBe(true);
-        });
+        listings: ['123', '456'],
+      }).then(() => {
+        expect(true).toBe(true);
+      });
     });
 
     it('should fail when the user is missing required properties', () => {
       expect.assertions(1);
       return User.validate({
         code: '123',
-      })
-        .catch((err) => {
-          expect(err.message).toBe('The "email" property is required');
-        });
+      }).catch(err => {
+        expect(err.message).toBe('The "email" property is required');
+      });
     });
 
     it('should fail when a property is an invalid type', () => {
@@ -53,13 +56,14 @@ describe('User', () => {
       return User.validate({
         code: 123,
         email: 'test@example.com',
-      })
-        .catch((err) => {
-          expect(err.message).toBe('The "code" property must be of type "string"');
-        });
+      }).catch(err => {
+        expect(err.message).toBe(
+          'The "code" property must be of type "string"'
+        );
+      });
     });
 
-    it('should fail when a property fails it\'s defined validation.', () => {
+    it("should fail when a property fails it's defined validation.", () => {
       expect.assertions(1);
       return User.validate({
         code: '123',
@@ -68,10 +72,11 @@ describe('User', () => {
           0: 123,
           1: 345,
         },
-      })
-        .catch((err) => {
-          expect(err.message).toEqual('The "listings" property failed validation.');
-        });
+      }).catch(err => {
+        expect(err.message).toEqual(
+          'The "listings" property failed validation.'
+        );
+      });
     });
   });
 
@@ -84,20 +89,22 @@ describe('User', () => {
 
     it('should create a user', () => {
       expect.assertions(1);
-      return User.update(user)
-        .then((createdUser) => {
-          expect(createdUser).toEqual(Object.assign({ created: 'now', updated: 'now' }, user));
-        });
+      return User.update(user).then(createdUser => {
+        expect(createdUser).toEqual(
+          Object.assign({ created: 'now', updated: 'now' }, user)
+        );
+      });
     });
 
     it('should report error messages', () => {
       expect.assertions(1);
       const expectedErr = new Error('Danger!');
-      DocumentClient.prototype.update.mockImplementation((params, cb) => cb(expectedErr));
-      return User.update(user)
-        .catch((err) => {
-          expect(err).toEqual(expectedErr);
-        });
+      DocumentClient.prototype.update.mockImplementation((params, cb) =>
+        cb(expectedErr)
+      );
+      return User.update(user).catch(err => {
+        expect(err).toEqual(expectedErr);
+      });
     });
   });
 
@@ -106,20 +113,20 @@ describe('User', () => {
     const email = 'test@example.com';
     it('should delete a user', () => {
       expect.assertions(1);
-      return User.delete(email)
-        .then((deletedEmail) => {
-          expect(email).toBe(deletedEmail);
-        });
+      return User.delete(email).then(deletedEmail => {
+        expect(email).toBe(deletedEmail);
+      });
     });
 
     it('should report error messages', () => {
       expect.assertions(1);
       const expectedErr = new Error('nooo!');
-      DocumentClient.prototype.delete.mockImplementation((params, cb) => cb(expectedErr));
-      return User.delete(email)
-        .catch((err) => {
-          expect(err).toEqual(expectedErr);
-        });
+      DocumentClient.prototype.delete.mockImplementation((params, cb) =>
+        cb(expectedErr)
+      );
+      return User.delete(email).catch(err => {
+        expect(err).toEqual(expectedErr);
+      });
     });
   });
 
@@ -132,20 +139,22 @@ describe('User', () => {
 
     it('should get a user', () => {
       expect.assertions(1);
-      DocumentClient.prototype.get.mockImplementation((params, cb) => cb(null, { Item: user }));
-      return User.get(user.email)
-        .then((returnedUser) => {
-          expect(user).toEqual(returnedUser);
-        });
+      DocumentClient.prototype.get.mockImplementation((params, cb) =>
+        cb(null, { Item: user })
+      );
+      return User.get(user.email).then(returnedUser => {
+        expect(user).toEqual(returnedUser);
+      });
     });
 
     it('should report error messages', () => {
       const expectedErr = new Error('nooo!');
-      DocumentClient.prototype.get.mockImplementation((params, cb) => cb(expectedErr));
-      return User.get(user.email)
-        .catch((err) => {
-          expect(err).toEqual(expectedErr);
-        });
+      DocumentClient.prototype.get.mockImplementation((params, cb) =>
+        cb(expectedErr)
+      );
+      return User.get(user.email).catch(err => {
+        expect(err).toEqual(expectedErr);
+      });
     });
   });
 });

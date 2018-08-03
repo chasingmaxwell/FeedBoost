@@ -2,14 +2,8 @@ const config = require('config');
 const User = require('../../lib/user');
 const Token = require('../../lib/token');
 
-const {
-  name: appName,
-  baseUri,
-  filesUrl,
-} = config.get('app');
-const {
-  host: reverbHost,
-} = config.get('reverb');
+const { name: appName, baseUri, filesUrl } = config.get('app');
+const { host: reverbHost } = config.get('reverb');
 
 module.exports = (event, context, callback) => {
   let cookieString = '';
@@ -26,54 +20,59 @@ module.exports = (event, context, callback) => {
 
   if (event.queryStringParameters) {
     if (typeof event.queryStringParameterssuccessMessage !== 'undefined') {
-      successMessage = `<div class="successMessage message">${event.queryStringParameters.successMessage}</div>`;
+      successMessage = `<div class="successMessage message">${
+        event.queryStringParameters.successMessage
+      }</div>`;
     }
 
     if (typeof event.queryStringParameterserrorMessage !== 'undefined') {
-      errorMessage = `<div class="errorMessage message">${event.queryStringParameters.errorMessage}</div>`;
+      errorMessage = `<div class="errorMessage message">${
+        event.queryStringParameters.errorMessage
+      }</div>`;
     }
   }
 
   // Get the token.
-  return Token.getFromCookie(cookieString)
+  return (
+    Token.getFromCookie(cookieString)
 
-    // Get the user.
-    .then(token => User.getFromToken(token))
+      // Get the user.
+      .then(token => User.getFromToken(token))
 
-    // Build an authenticated page.
-    .then((user) => {
-      page.content = `
+      // Build an authenticated page.
+      .then(user => {
+        page.content = `
         <h2>Hi, ${user.email}!</h2>
         <p>You've subscribed to receive email notifications when new items appear in your feed.</p>
         <p class="cta"><a href="${reverbHost}/my/feed" target="_blank">Take me to my feed!</a></p>
       `;
-      page.footer = `
+        page.footer = `
         <p>Would you like to stop receiving notifications? Uninstall FeedBoost from your <a href="${reverbHost}/apps/installed" target="_blank">apps dashboard</a> on Reverb.com.</p>
         <p>Not ${user.email}? <a href="${baseUri}/logout">Log out</a>.
       `;
-    })
+      })
 
-    // Build the anonymous page.
-    .catch(() => {
-      page.content = `
+      // Build the anonymous page.
+      .catch(() => {
+        page.content = `
         <h2>Ditch the delay in your Reverb.com feed!</h2>
         <p>Ever missed out on some rockin' gear because you didn't receive the feed notification in time? That gear gets snatched up quick! ${appName} boosts the signal of your Reverb.com feed by ditching the delay and notifying you of changes to your feed within one hour.</p>
         <p class="cta"><a href="${baseUri}/subscribe">Boost my feed!</a></p>
       `;
-      page.footer = `
+        page.footer = `
         <p>Already subscribed? <a href="${baseUri}/login">Log in</a> to manage your preferences.</p>
         <p><a href="${baseUri}/subscribe">Subscribe now</a> to start recieving notifications from your feed!</p>
       `;
-    })
+      })
 
-    // Return the page.
-    .then(() => {
-      callback(null, {
-        statusCode: 200,
-        headers: {
-          'Content-Type': 'text/html',
-        },
-        body: `
+      // Return the page.
+      .then(() => {
+        callback(null, {
+          statusCode: 200,
+          headers: {
+            'Content-Type': 'text/html',
+          },
+          body: `
         <!doctype html>
         <html>
         <head>
@@ -223,6 +222,7 @@ module.exports = (event, context, callback) => {
         </body>
         </html>
         `,
-      });
-    });
+        });
+      })
+  );
 };

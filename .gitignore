@@ -4,3 +4,5 @@ __coverage__
 .vscode
 config/*
 !config/default.*
+lib/*
+!src/**/lib

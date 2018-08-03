@@ -4,7 +4,9 @@ const { Readable } = require('stream');
 const db = new AWS.DynamoDB.DocumentClient();
 
 // @TODO: add test coverage.
-module.exports = ({ index, query, values } = { index: null, query: null, values: null }) => {
+module.exports = (
+  { index, query, values } = { index: null, query: null, values: null }
+) => {
   const params = {
     TableName: `feedboostUser_${process.env.NODE_ENV}`,
   };
@@ -44,8 +46,7 @@ module.exports = ({ index, query, values } = { index: null, query: null, values:
 
         if (typeof data.LastEvaluatedKey !== 'undefined') {
           lastKey = data.LastEvaluatedKey;
-        }
-        else {
+        } else {
           end = true;
         }
 

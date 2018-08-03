@@ -5,7 +5,7 @@ const Cryptr = require('cryptr');
 const cryptrKey = config.get('app.cryptrKey');
 const reverbHost = config.get('reverb.host');
 
-module.exports = (user) => {
+module.exports = user => {
   const cryptr = new Cryptr(cryptrKey);
   const code = cryptr.decrypt(user.code);
   return request({
@@ -15,6 +15,5 @@ module.exports = (user) => {
     headers: {
       Authorization: `Bearer ${code}`,
     },
-  })
-    .then(response => response.listings);
+  }).then(response => response.listings);
 };

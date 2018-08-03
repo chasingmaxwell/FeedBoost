@@ -7,8 +7,7 @@ const jwtSecret = config.get('app.jwtSecret');
 function verify(token) {
   try {
     return jwt.verify(token, jwtSecret).code;
-  }
-  catch (e) {
+  } catch (e) {
     throw new Error('Token invalid.');
   }
 }
@@ -18,8 +17,9 @@ function sign(code) {
 }
 
 function getFromCookie(string) {
-  return Promise.resolve()
-    .then(() => verify(cookie.parse(string).rtoken || ''));
+  return Promise.resolve().then(() =>
+    verify(cookie.parse(string).rtoken || '')
+  );
 }
 
 module.exports = {

@@ -6756,7 +6756,7 @@ serverless-offline@^3.23.1:
     uuid "^3.2.1"
     velocityjs "^0.9.3"
 
-serverless@^1.28.0:
+serverless@^1.29.2:
   version "1.29.2"
   resolved "https://registry.yarnpkg.com/serverless/-/serverless-1.29.2.tgz#6dbc6d471bddb300b63c193d7f27a2a331af4445"
   dependencies:

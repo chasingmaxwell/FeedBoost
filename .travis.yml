@@ -31,11 +31,13 @@ jobs:
 
     - stage: deploy-dev
       script:
+        - yarn --production
         - yarn sls deploy -s dev -v && yarn sls -s dev files
 
     - stage: release
-      script: yarn semantic-release
+  script: yarn semantic-release
 
     - stage: deploy-prod
       script:
+        - yarn --production
         - yarn sls deploy -s production -v && yarn sls -s production files

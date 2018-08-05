@@ -58,7 +58,7 @@
     "prettier": "^1.13.7",
     "semantic-release": "^15.9.3",
     "semantic-release-conventional-commits": "^2.0.1",
-    "serverless": "^1.28.0",
+    "serverless": "^1.29.2",
     "serverless-offline": "^3.23.1"
   },
   "keywords": [],

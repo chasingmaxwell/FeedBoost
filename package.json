@@ -10,6 +10,7 @@
     "debug-test": "node --inspect --debug-brk ./node_modules/.bin/jest --runInBand --env jest-environment-node-debug",
     "lint": "eslint --ignore-path .gitignore .",
     "lint-staged": "lint-staged",
+    "prepare": "yarn build",
     "precommit": "yarn lint",
     "prepush": "yarn test",
     "start": "yarn build && sls offline start",

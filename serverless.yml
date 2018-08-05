@@ -136,7 +136,6 @@ resources:
           WriteCapacityUnits: 1
 
 package:
-  excludeDevDependencies: false
   exclude:
     - '.*'
     - '**/*.swp'
@@ -144,5 +143,3 @@ package:
     - '__coverage__/**'
     - 'yarn.lock'
     - 'README.md'
-    - 'node_modules/serverless/**'
-    - 'node_modules/serverless-*/**'

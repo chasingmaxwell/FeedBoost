@@ -38,7 +38,10 @@ const handler: LambdaHandler = (event, context, callback) => {
 
   // Get the token.
   return (
-    Promise.resolve(Token.getFromCookie(cookieString))
+    Promise.resolve()
+
+      // Try to get the token from the cookie.
+      .then(() => Token.getFromCookie(cookieString))
 
       // Get the user.
       .then(token => User.getFromToken(token))

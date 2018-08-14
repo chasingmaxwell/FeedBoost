@@ -1,6 +1,10 @@
+/* @flow */
+
+import type { User } from 'custom-types';
+
 const query = require('./query.js');
 
-module.exports = token =>
+module.exports = (token: string): Promise<User> =>
   query({
     index: 'code',
     query: 'code = :code',

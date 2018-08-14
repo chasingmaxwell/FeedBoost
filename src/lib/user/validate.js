@@ -1,4 +1,8 @@
-module.exports = user =>
+/* @flow */
+
+import type { User } from 'custom-types';
+
+module.exports = (user: User): Promise<User> =>
   new Promise((resolve, reject) => {
     const props = new Map();
     props.set('code', {

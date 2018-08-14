@@ -1,3 +1,7 @@
+/* @flow */
+
+import type { LambdaHandler } from 'custom-types';
+
 const config = require('config');
 const Token = require('../../lib/token');
 const User = require('../../lib/user');
@@ -5,13 +9,13 @@ const User = require('../../lib/user');
 const { host: reverbHost, key: reverbKey, redirectPath } = config.get('reverb');
 const { baseUri } = config.get('app');
 
-module.exports = (event, context, callback) => {
+const handler: LambdaHandler = (event, context, callback) => {
   const cookieString =
-    typeof event.headersCookie !== 'undefined' ? event.headers.Cookie : '';
+    typeof event.headers.Cookie !== 'undefined' ? event.headers.Cookie : '';
 
   // Get the token.
   return (
-    Token.getFromCookie(cookieString)
+    Promise.resolve(Token.getFromCookie(cookieString))
 
       // Get the user.
       .then(token => User.getFromToken(token))
@@ -39,3 +43,5 @@ module.exports = (event, context, callback) => {
       })
   );
 };
+
+module.exports = handler;

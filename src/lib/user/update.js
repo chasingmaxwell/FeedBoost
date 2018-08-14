@@ -1,10 +1,14 @@
+/* @flow */
+
+import type { User } from 'custom-types';
+
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
 const validate = require('./validate.js');
 const get = require('./get.js');
 
 const db = new AWS.DynamoDB.DocumentClient();
 
-module.exports = user =>
+module.exports = (user: User): Promise<User> =>
   validate(user)
     // Look for an existing user.
     .then(validUser =>
@@ -26,7 +30,7 @@ module.exports = user =>
 
       return new Promise((resolve, reject) => {
         const params = {
-          TableName: `feedboostUser_${process.env.NODE_ENV}`,
+          TableName: `feedboostUser_${String(process.env.NODE_ENV)}`,
           Key: {
             email: updatedUser.email,
           },

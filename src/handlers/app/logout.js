@@ -1,9 +1,13 @@
+/* @flow */
+
+import type { LambdaHandler } from 'custom-types';
+
 const config = require('config');
 const cookie = require('cookie');
 
 const baseUri = config.get('app.baseUri');
 
-module.exports = (event, context, callback) => {
+const handler: LambdaHandler = (event, context, callback) => {
   callback(null, {
     statusCode: 302,
     body: '',
@@ -17,3 +21,5 @@ module.exports = (event, context, callback) => {
     },
   });
 };
+
+module.exports = handler;

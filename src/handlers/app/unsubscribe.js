@@ -1,12 +1,19 @@
+/* @flow */
+
+import type { LambdaHandler } from 'custom-types';
+
+const _ = require('lodash');
 const config = require('config');
 const User = require('../../lib/user');
 const Cryptr = require('cryptr');
 
 const cryptrKey = config.get('app.cryptrKey');
 
-module.exports = (event, context, callback) => {
+const handler: LambdaHandler = (event, context, callback) => {
   const cryptr = new Cryptr(cryptrKey);
-  const email = cryptr.decrypt(decodeURIComponent(event.pathParameters.hash));
+  const email = cryptr.decrypt(
+    decodeURIComponent(_.get(event, 'pathParameters.hash', ''))
+  );
 
   return (
     User.delete(email)
@@ -28,3 +35,5 @@ module.exports = (event, context, callback) => {
       })
   );
 };
+
+module.exports = handler;

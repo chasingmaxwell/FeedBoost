@@ -1,12 +1,22 @@
+/* @flow */
+
+import type { User } from 'custom-types';
+
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
 
 const db = new AWS.DynamoDB.DocumentClient();
 
-// @TODO: add test coverage.
-module.exports = ({ index, query, values }) => {
-  const params = {
-    TableName: `feedboostUser_${process.env.NODE_ENV}`,
-  };
+module.exports = ({
+  index,
+  query,
+  values,
+}: {
+  index?: string,
+  query?: string | { [string]: any },
+  values?: { [string]: any },
+} = {}): Promise<Array<User>> => {
+  const params = {};
+  params.TableName = `feedboostUser_${String(process.env.NODE_ENV)}`;
 
   if (typeof index !== 'undefined') {
     params.IndexName = index;

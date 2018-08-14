@@ -1,7 +1,11 @@
+/* @flow */
+
+import type { LambdaHandler, User } from 'custom-types';
+
 const _ = require('lodash');
 const config = require('config');
-const User = require('../../lib/user');
-const Feed = require('../../lib/feed');
+const { scan: userScan, update: userUpdate } = require('../../lib/user');
+const feed = require('../../lib/feed');
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
 
 const { name: appName, email: appEmail, filesUrl } = config.get('app');
@@ -11,19 +15,21 @@ const ses = new AWS.SES();
 
 // Consume the user scan stream and operate on each batch — and each user in
 // each batch — in parallel.
-module.exports = (event, context, callback) =>
+const handler: LambdaHandler = (event, context, callback) =>
   new Promise(resolve => {
     const batches = [];
-    const scanStream = User.scan();
+    const scanStream = userScan();
 
-    scanStream.on('data', users => {
+    scanStream.on('data', (users: Array<User>) => {
       // Get the feed associated with this user.
       const ops = users.map(user => {
         const newUser = _.cloneDeep(user);
-        const result = { user: newUser };
+        const result = {};
+        result.user = newUser;
 
         return (
-          Feed.get(user)
+          feed
+            .get(user)
             // Notify and update the user.
             .then(
               listings =>
@@ -120,7 +126,7 @@ module.exports = (event, context, callback) =>
                         newUser.listings = listings.map(item => item.id);
 
                         // Set new listing IDs on user.
-                        User.update(newUser)
+                        userUpdate(newUser)
                           .then(() => {
                             result.updated = true;
                             _resolve(result);
@@ -139,12 +145,9 @@ module.exports = (event, context, callback) =>
 
             // Collect errors.
             .catch(err =>
-              Object.assign(
-                {
-                  error: err.message,
-                },
-                result
-              )
+              Object.assign({}, result, {
+                error: err.message,
+              })
             )
         );
       });
@@ -195,3 +198,5 @@ module.exports = (event, context, callback) =>
     .catch(err => {
       callback(err);
     });
+
+module.exports = handler;

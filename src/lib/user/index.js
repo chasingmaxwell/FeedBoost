@@ -1,3 +1,5 @@
+/* @flow */
+
 const update = require('./update');
 const deleteUser = require('./delete');
 const get = require('./get');

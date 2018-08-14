@@ -1,3 +1,7 @@
+/* @flow */
+
+import type { LambdaHandler } from 'custom-types';
+
 const config = require('config');
 const User = require('../../lib/user');
 const Token = require('../../lib/token');
@@ -5,7 +9,7 @@ const Token = require('../../lib/token');
 const { name: appName, baseUri, filesUrl } = config.get('app');
 const { host: reverbHost } = config.get('reverb');
 
-module.exports = (event, context, callback) => {
+const handler: LambdaHandler = (event, context, callback) => {
   let cookieString = '';
   const page = {
     content: '',
@@ -19,13 +23,13 @@ module.exports = (event, context, callback) => {
   }
 
   if (event.queryStringParameters) {
-    if (typeof event.queryStringParameterssuccessMessage !== 'undefined') {
+    if (typeof event.queryStringParameters.successMessage !== 'undefined') {
       successMessage = `<div class="successMessage message">${
         event.queryStringParameters.successMessage
       }</div>`;
     }
 
-    if (typeof event.queryStringParameterserrorMessage !== 'undefined') {
+    if (typeof event.queryStringParameters.errorMessage !== 'undefined') {
       errorMessage = `<div class="errorMessage message">${
         event.queryStringParameters.errorMessage
       }</div>`;
@@ -34,7 +38,7 @@ module.exports = (event, context, callback) => {
 
   // Get the token.
   return (
-    Token.getFromCookie(cookieString)
+    Promise.resolve(Token.getFromCookie(cookieString))
 
       // Get the user.
       .then(token => User.getFromToken(token))
@@ -226,3 +230,5 @@ module.exports = (event, context, callback) => {
       })
   );
 };
+
+module.exports = handler;

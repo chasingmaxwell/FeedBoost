@@ -1,3 +1,8 @@
+/* @flow */
+
+import type { LambdaHandler } from 'custom-types';
+
+const _ = require('lodash');
 const config = require('config');
 const request = require('request-promise');
 const cookie = require('cookie');
@@ -13,13 +18,16 @@ const {
   redirectPath,
 } = config.get('reverb');
 
-module.exports = (event, context, callback) => {
+const handler: LambdaHandler = (event, context, callback) => {
   const cryptr = new Cryptr(cryptrKey);
 
   return (
     new Promise((resolve, reject) => {
       // Check for a valid state parameter.
-      const state = Token.verify(event.queryStringParameters.state);
+      const state = Token.verify(
+        _.get(event, 'queryStringParameters.state', '')
+      );
+
       if (state !== reverbKey) {
         reject(new Error('The state parameter did not match.'));
         return;
@@ -36,7 +44,7 @@ module.exports = (event, context, callback) => {
           qs: {
             client_id: reverbKey,
             client_secret: reverbSecret,
-            code: event.queryStringParameters.code,
+            code: _.get(event, 'queryStringParameters.code', ''),
             grant_type: 'authorization_code',
             redirect_uri: `${baseUri}${redirectPath}`,
           },
@@ -86,12 +94,10 @@ module.exports = (event, context, callback) => {
           }
         }
 
-        const user = {
+        return User.update({
           code: cryptr.encrypt(data.code),
           email: data.user.email,
-        };
-
-        return User.update(user);
+        });
       })
 
       // Redirect to the client.
@@ -133,3 +139,5 @@ module.exports = (event, context, callback) => {
       })
   );
 };
+
+module.exports = handler;

@@ -88,7 +88,9 @@ const handler: LambdaHandler = (event, context, callback) => {
           .catch(e => {
             if (
               e.statusCode !== 422 ||
-              !_.path(e, 'error.errors', []).includes('has already been taken')
+              !_.get(e, 'error.errors.url', []).includes(
+                'has already been taken'
+              )
             ) {
               throw e;
             }
@@ -134,6 +136,8 @@ const handler: LambdaHandler = (event, context, callback) => {
 
       // Uh-oh. Something went wrong.
       .catch(err => {
+        // Sometimes errors are easier to understand in the logs with or without JSON.stringify.
+        console.error('ERROR', err);
         console.error(JSON.stringify(err)); // eslint-disable-line no-console
 
         callback(null, {

@@ -1,46 +1,50 @@
+/* @flow */
+
+import type { LambdaHandler } from 'custom-types';
+
 const config = require('config');
 const Token = require('../../lib/token');
 const User = require('../../lib/user');
 
-const {
-  host: reverbHost,
-  key: reverbKey,
-  redirectPath,
-} = config.get('reverb');
-const {
-  baseUri,
-} = config.get('app');
+const { host: reverbHost, key: reverbKey, redirectPath } = config.get('reverb');
+const { baseUri } = config.get('app');
 
-module.exports = (event, context, callback) => {
-  const cookieString = typeof event.headersCookie !== 'undefined'
-    ? event.headers.Cookie
-    : '';
+const handler: LambdaHandler = (event, context, callback) => {
+  const cookieString =
+    typeof event.headers.Cookie !== 'undefined' ? event.headers.Cookie : '';
 
   // Get the token.
-  return Token.getFromCookie(cookieString)
+  return (
+    Promise.resolve()
 
-    // Get the user.
-    .then(token => User.getFromToken(token))
+      // Try to get the token from the cookie.
+      .then(() => Token.getFromCookie(cookieString))
 
-    // Redirect to the homepage if we already have a user.
-    .then(() => {
-      callback(null, {
-        statusCode: 302,
-        body: '',
-        headers: {
-          Location: baseUri,
-        },
-      });
-    })
+      // Get the user.
+      .then(token => User.getFromToken(token))
 
-    .catch(() => {
-      const state = Token.sign(reverbKey);
-      callback(null, {
-        statusCode: 302,
-        body: '',
-        headers: {
-          Location: `${reverbHost}/oauth/authorize?client_id=${reverbKey}&redirect_uri=${baseUri}${redirectPath}&response_type=code&scope=read_lists+read_profile&state=${state}`,
-        },
-      });
-    });
+      // Redirect to the homepage if we already have a user.
+      .then(() => {
+        callback(null, {
+          statusCode: 302,
+          body: '',
+          headers: {
+            Location: baseUri,
+          },
+        });
+      })
+
+      .catch(() => {
+        const state = Token.sign(reverbKey);
+        callback(null, {
+          statusCode: 302,
+          body: '',
+          headers: {
+            Location: `${reverbHost}/oauth/authorize?client_id=${reverbKey}&redirect_uri=${baseUri}${redirectPath}&response_type=code&scope=read_lists+read_profile&state=${state}`,
+          },
+        });
+      })
+  );
 };
+
+module.exports = handler;

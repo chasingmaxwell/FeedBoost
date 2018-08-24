@@ -49,13 +49,13 @@ provider:
 
 functions:
   apphome:
-    handler: src/handlers/app.home
+    handler: lib/handlers/app.home
     events:
       - http:
           path: /
           method: get
   appsub:
-    handler: src/handlers/app.subscribe
+    handler: lib/handlers/app.subscribe
     events:
       - http:
           path: subscribe
@@ -64,25 +64,25 @@ functions:
           path: login
           method: get
   appunsub:
-    handler: src/handlers/app.unsubscribe
+    handler: lib/handlers/app.unsubscribe
     events:
       - http:
           path: unsubscribe/{hash}
           method: post
   appauth:
-    handler: src/handlers/app.auth
+    handler: lib/handlers/app.auth
     events:
       - http:
           path: subscribe/success
           method: get
   logout:
-    handler: src/handlers/app.logout
+    handler: lib/handlers/app.logout
     events:
       - http:
           path: logout
           method: get
   feedcheck:
-    handler: src/handlers/feed.check
+    handler: lib/handlers/feed.check
     events:
       - schedule: rate(1 hour)
 resources:
@@ -136,7 +136,6 @@ resources:
           WriteCapacityUnits: 1
 
 package:
-  excludeDevDependencies: false
   exclude:
     - '.*'
     - '**/*.swp'
@@ -144,5 +143,3 @@ package:
     - '__coverage__/**'
     - 'yarn.lock'
     - 'README.md'
-    - 'node_modules/serverless/**'
-    - 'node_modules/serverless-*/**'

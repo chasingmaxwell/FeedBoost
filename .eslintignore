@@ -1,0 +1,5 @@
+node_modules
+__coverage__
+lib/
+!src/**/lib/
+flow-typed/

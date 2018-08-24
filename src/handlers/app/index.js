@@ -1,3 +1,7 @@
+/* @flow */
+
+import type { LambdaHandler } from 'custom-types';
+
 const home = require('./home.js');
 const subscribe = require('./subscribe.js');
 const unsubscribe = require('./unsubscribe.js');
@@ -11,3 +15,4 @@ module.exports = {
   auth,
   logout,
 };
+(module.exports: { [name: string]: LambdaHandler });

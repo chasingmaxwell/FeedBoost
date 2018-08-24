@@ -1,3 +1,5 @@
+/* @flow */
+
 const get = require('./get');
 
 module.exports = {

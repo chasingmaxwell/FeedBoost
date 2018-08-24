@@ -81,7 +81,19 @@ const handler: LambdaHandler = (event, context, callback) => {
             )}`,
             topic: 'app/uninstalled',
           },
-        }).then(() => data)
+        })
+          .then(() => data)
+          // Catch the error where the subscription already exists. This can
+          // happen when a user's cookie has expired and they authenticate
+          // after having already installed the app.
+          .catch(e => {
+            if (
+              e.statusCode !== 422 ||
+              !_.path(e, 'error.errors', []).includes('has already been taken')
+            ) {
+              throw e;
+            }
+          })
       )
 
       // Try to create a corresponding user.

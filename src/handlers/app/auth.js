@@ -82,7 +82,6 @@ const handler: LambdaHandler = (event, context, callback) => {
             topic: 'app/uninstalled',
           },
         })
-          .then(() => data)
           // Catch the error where the subscription already exists. This can
           // happen when a user's cookie has expired and they authenticate
           // after having already installed the app.
@@ -94,6 +93,7 @@ const handler: LambdaHandler = (event, context, callback) => {
               throw e;
             }
           })
+          .then(() => data)
       )
 
       // Try to create a corresponding user.

@@ -18,6 +18,7 @@
     "type": "flow status"
   },
   "dependencies": {
+    "@auth0/s3": "^1.0.0",
     "config": "^1.29.0",
     "cookie": "^0.3.1",
     "cryptr": "^2.0.0",
@@ -25,7 +26,6 @@
     "lodash": "^4.17.4",
     "request": "^2.78.0",
     "request-promise": "^4.1.1",
-    "s3": "^4.4.0",
     "uuid": "^2.0.3"
   },
   "devDependencies": {
@@ -60,7 +60,7 @@
     "semantic-release": "^15.9.3",
     "semantic-release-conventional-commits": "^2.0.1",
     "serverless": "^1.29.2",
-    "serverless-offline": "^3.23.1"
+    "serverless-offline": "^5.12.1"
   },
   "keywords": [],
   "author": "Peter Sieg <chasingmaxwell@gmail.com>",

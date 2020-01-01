@@ -1,4 +1,4 @@
-const s3 = require('s3');
+const s3 = require('@auth0/s3');
 
 class Files {
   constructor(serverless, options) {
@@ -7,24 +7,24 @@ class Files {
     this.provider = serverless.getProvider('aws');
     this.commands = {
       files: {
-        lifecycleEvents: ['resources']
-      }
+        lifecycleEvents: ['resources'],
+      },
     };
     this.hooks = {
-      'files:resources': this.deployFiles.bind(this)
+      'files:resources': this.deployFiles.bind(this),
     };
   }
 
   deployFiles() {
     const awsS3 = new this.provider.sdk.S3(this.provider.getCredentials());
-    const s3Client = s3.createClient({s3Client: awsS3});
+    const s3Client = s3.createClient({ s3Client: awsS3 });
     let params = {
       localDir: 'files',
       deleteRemoved: true,
       s3Params: {
         Bucket: 'feedboostassets' + this.options.stage,
-        Prefix: ''
-      }
+        Prefix: '',
+      },
     };
 
     let uploader = s3Client.uploadDir(params);
@@ -34,7 +34,11 @@ class Files {
     });
 
     uploader.on('progress', () => {
-      console.log('progress: ', uploader.progressAmount, uploader.progressTotal);
+      console.log(
+        'progress: ',
+        uploader.progressAmount,
+        uploader.progressTotal
+      );
     });
 
     uploader.on('end', () => {

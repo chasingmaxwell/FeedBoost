@@ -11,6 +11,7 @@ module.exports = {
   // },
   testEnvironment: 'node',
   testPathIgnorePatterns: ['<rootDir>/lib', '<rootDir>/config'],
+  collectCoverageFrom: ['<rootDir>/src/**'],
   transform: {
     '^.+\\.jsx?$': 'babel-jest',
   },

@@ -32,7 +32,7 @@ const handler: LambdaHandler = (event, context, callback) =>
             .get(user)
             // Notify and update the user.
             .then(
-              listings =>
+              (listings = []) =>
                 new Promise((_resolve, _reject) => {
                   result.listings = listings;
 

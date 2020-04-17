@@ -2,7 +2,6 @@
 node_modules
 __coverage__
 .vscode
-config/*
-!config/default.*
+config/local.*
 lib/*
 !src/**/lib

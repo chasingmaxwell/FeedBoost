@@ -102,10 +102,11 @@ const handler: LambdaHandler = (event, context, callback) => {
       .then(data => {
         // If the environment specifies a list of allowed users, make sure the
         // current user is in it.
-        if (typeof allowedUsers !== 'undefined') {
-          if (allowedUsers.split('|').indexOf(data.user.email) === -1) {
-            throw new Error('User is not allowed.');
-          }
+        if (
+          typeof allowedUsers !== 'undefined' &&
+          allowedUsers.split('|').indexOf(data.user.email) === -1
+        ) {
+          throw new Error('User is not allowed.');
         }
 
         return User.update({

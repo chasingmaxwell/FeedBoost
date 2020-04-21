@@ -6,6 +6,7 @@ module.exports = {
     email: 'admin@feedboost.rocks',
     filesUrl: 'https://feedboost.rocks/files',
     baseUri: 'http://localhost:3000',
+    allowedUsers: 'example@feedboost.rocks',
   },
   reverb: {
     host: 'https://reverb.com',

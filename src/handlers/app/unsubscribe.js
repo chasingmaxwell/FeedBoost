@@ -30,7 +30,7 @@ const handler: LambdaHandler = (event, context, callback) => {
       })
 
       // Uh-oh. Something went wrong.
-      .catch(e => {
+      .catch((e) => {
         callback(e);
       })
   );

@@ -16,13 +16,13 @@ const ses = new AWS.SES();
 // Consume the user scan stream and operate on each batch — and each user in
 // each batch — in parallel.
 const handler: LambdaHandler = (event, context, callback) =>
-  new Promise(resolve => {
+  new Promise((resolve) => {
     const batches = [];
     const scanStream = userScan();
 
     scanStream.on('data', (users: Array<User>) => {
       // Get the feed associated with this user.
-      const ops = users.map(user => {
+      const ops = users.map((user) => {
         const newUser = _.cloneDeep(user);
         const result = {};
         result.user = newUser;
@@ -40,20 +40,16 @@ const handler: LambdaHandler = (event, context, callback) =>
                   newUser.listings = newUser.listings || [];
 
                   const diff = listings.filter(
-                    item => newUser.listings.indexOf(item.id) === -1
+                    (item) => newUser.listings.indexOf(item.id) === -1
                   );
 
                   if (diff.length > 0) {
                     let matchMarkup =
                       '<table border="0" cellpadding="0" cellspacing="0" style="padding: 20px 0;">';
 
-                    diff.forEach(item => {
+                    diff.forEach((item) => {
                       // eslint-disable-next-line no-underscore-dangle
-                      matchMarkup += `<tr><td><a href="${
-                        item._links.web.href
-                      }" style="color: #0080a5;">${item.title}</a> - ${
-                        item.price.display
-                      }</td><tr>`;
+                      matchMarkup += `<tr><td><a href="${item._links.web.href}" style="color: #0080a5;">${item.title}</a> - ${item.price.display}</td><tr>`;
                     });
 
                     matchMarkup += '</table>';
@@ -115,7 +111,7 @@ const handler: LambdaHandler = (event, context, callback) =>
                         },
                         Source: `${appName} <${appEmail}>`,
                       },
-                      err => {
+                      (err) => {
                         if (err) {
                           _reject(err);
                           return;
@@ -123,7 +119,7 @@ const handler: LambdaHandler = (event, context, callback) =>
 
                         result.notified = true;
 
-                        newUser.listings = listings.map(item => item.id);
+                        newUser.listings = listings.map((item) => item.id);
 
                         // Set new listing IDs on user.
                         userUpdate(newUser)
@@ -131,7 +127,7 @@ const handler: LambdaHandler = (event, context, callback) =>
                             result.updated = true;
                             _resolve(result);
                           })
-                          .catch(e => {
+                          .catch((e) => {
                             _reject(e);
                           });
                       }
@@ -144,7 +140,7 @@ const handler: LambdaHandler = (event, context, callback) =>
             )
 
             // Collect errors.
-            .catch(err =>
+            .catch((err) =>
               Object.assign({}, result, {
                 error: err.message,
               })
@@ -161,19 +157,19 @@ const handler: LambdaHandler = (event, context, callback) =>
   })
 
     // Get the total processed count and errors.
-    .then(batches =>
-      Promise.all(batches).then(batchResults => {
+    .then((batches) =>
+      Promise.all(batches).then((batchResults) => {
         let errors = [];
         let count = 0;
         let updated = 0;
         let notified = 0;
 
-        batchResults.forEach(batch => {
+        batchResults.forEach((batch) => {
           count += batch.length;
-          updated += batch.filter(item => item.updated).length;
-          notified += batch.filter(item => item.notified).length;
+          updated += batch.filter((item) => item.updated).length;
+          notified += batch.filter((item) => item.notified).length;
           errors = errors.concat(
-            batch.filter(item => typeof item.error !== 'undefined')
+            batch.filter((item) => typeof item.error !== 'undefined')
           );
         });
 
@@ -195,7 +191,7 @@ const handler: LambdaHandler = (event, context, callback) =>
     )
 
     // Uh-oh. Something unexpected went wrong.
-    .catch(err => {
+    .catch((err) => {
       callback(err);
     });
 

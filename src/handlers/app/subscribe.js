@@ -21,7 +21,7 @@ const handler: LambdaHandler = (event, context, callback) => {
       .then(() => Token.getFromCookie(cookieString))
 
       // Get the user.
-      .then(token => User.getFromToken(token))
+      .then((token) => User.getFromToken(token))
 
       // Redirect to the homepage if we already have a user.
       .then(() => {

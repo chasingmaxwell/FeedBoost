@@ -65,7 +65,7 @@ jest.mock('aws-sdk', () => {
   };
 });
 jest.mock('request-promise', () =>
-  jest.fn(async req => {
+  jest.fn(async (req) => {
     if (req.headers.Authorization === 'Bearer noListingsNoNew') {
       return [];
     }

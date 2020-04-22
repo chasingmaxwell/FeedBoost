@@ -9,7 +9,7 @@ const user = {
   code: '123',
 };
 update.mockResolvedValue(user);
-const requestImplementation = async req => {
+const requestImplementation = async (req) => {
   if (req.uri === 'https://reverb.com/oauth/token') {
     return {
       access_token: 'anAccessToken',
@@ -101,7 +101,7 @@ describe('auth', () => {
     });
   });
   it('does not reject when the uninstall webhook has already been registered', async () => {
-    request.mockImplementation(async req => {
+    request.mockImplementation(async (req) => {
       if (req.uri === 'https://reverb.com/oauth/token') {
         return {
           access_token: 'anAccessToken',
@@ -135,7 +135,7 @@ describe('auth', () => {
     });
   });
   it('does not create a user if the user is not allowed', async () => {
-    request.mockImplementation(async req => {
+    request.mockImplementation(async (req) => {
       if (req.uri === 'https://reverb.com/oauth/token') {
         return {
           access_token: 'anAccessToken',
@@ -179,7 +179,7 @@ describe('auth', () => {
     });
   });
   it('catches errors, redirects to the homepage, and displays an error message', async () => {
-    request.mockImplementation(async req => {
+    request.mockImplementation(async (req) => {
       if (req.uri === 'https://reverb.com/oauth/token') {
         return {
           access_token: 'anAccessToken',

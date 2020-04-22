@@ -1,5 +1,6 @@
 [ignore]
 .*/node_modules/config-chain/test/broken.json
+.*/node_modules/ncjsm/test/__playground/samename.json
 
 [include]
 

@@ -61,8 +61,8 @@
     "prettier": "^2.0.5",
     "semantic-release": "^15.14.0",
     "semantic-release-conventional-commits": "^2.0.1",
-    "serverless": "^1.29.2",
-    "serverless-offline": "^5.12.1"
+    "serverless": "^1.68.0",
+    "serverless-offline": "^6.1.4"
   },
   "keywords": [],
   "author": "Peter Sieg <chasingmaxwell@gmail.com>",

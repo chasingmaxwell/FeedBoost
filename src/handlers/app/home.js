@@ -24,15 +24,11 @@ const handler: LambdaHandler = (event, context, callback) => {
 
   if (event.queryStringParameters) {
     if (typeof event.queryStringParameters.successMessage !== 'undefined') {
-      successMessage = `<div class="successMessage message">${
-        event.queryStringParameters.successMessage
-      }</div>`;
+      successMessage = `<div class="successMessage message">${event.queryStringParameters.successMessage}</div>`;
     }
 
     if (typeof event.queryStringParameters.errorMessage !== 'undefined') {
-      errorMessage = `<div class="errorMessage message">${
-        event.queryStringParameters.errorMessage
-      }</div>`;
+      errorMessage = `<div class="errorMessage message">${event.queryStringParameters.errorMessage}</div>`;
     }
   }
 
@@ -44,10 +40,10 @@ const handler: LambdaHandler = (event, context, callback) => {
       .then(() => Token.getFromCookie(cookieString))
 
       // Get the user.
-      .then(token => User.getFromToken(token))
+      .then((token) => User.getFromToken(token))
 
       // Build an authenticated page.
-      .then(user => {
+      .then((user) => {
         page.content = `
         <h2>Hi, ${user.email}!</h2>
         <p>You've subscribed to receive email notifications when new items appear in your feed.</p>

@@ -52,21 +52,21 @@ const handler: LambdaHandler = (event, context, callback) => {
       )
 
       // Get user data from Reverb.
-      .then(data =>
+      .then((data) =>
         request({
           uri: `${reverbHost}/api/my/account`,
           json: true,
           headers: {
             Authorization: `Bearer ${data.access_token}`,
           },
-        }).then(user => ({
+        }).then((user) => ({
           user,
           code: data.access_token,
         }))
       )
 
       // Register for the app uninstall webhook.
-      .then(data =>
+      .then((data) =>
         request({
           uri: `${reverbHost}/api/webhooks/registrations`,
           method: 'post',
@@ -85,7 +85,7 @@ const handler: LambdaHandler = (event, context, callback) => {
           // Catch the error where the subscription already exists. This can
           // happen when a user's cookie has expired and they authenticate
           // after having already installed the app.
-          .catch(e => {
+          .catch((e) => {
             if (
               e.statusCode !== 422 ||
               !_.get(e, 'error.errors.url', []).includes(
@@ -99,7 +99,7 @@ const handler: LambdaHandler = (event, context, callback) => {
       )
 
       // Try to create a corresponding user.
-      .then(data => {
+      .then((data) => {
         // If the environment specifies a list of allowed users, make sure the
         // current user is in it.
         if (
@@ -116,7 +116,7 @@ const handler: LambdaHandler = (event, context, callback) => {
       })
 
       // Redirect to the client.
-      .then(user => {
+      .then((user) => {
         // @TODO: check against the state parameter.
         const token = Token.sign(user.code);
         const cookieString = cookie.serialize('rtoken', String(token), {
@@ -136,7 +136,7 @@ const handler: LambdaHandler = (event, context, callback) => {
       })
 
       // Uh-oh. Something went wrong.
-      .catch(err => {
+      .catch((err) => {
         // Sometimes errors are easier to understand in the logs with or without JSON.stringify.
         console.error('ERROR', err);
         console.error(JSON.stringify(err)); // eslint-disable-line no-console

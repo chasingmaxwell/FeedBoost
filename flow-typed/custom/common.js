@@ -69,6 +69,6 @@ declare module 'custom-types' {
   declare type User = {
     code: string,
     email: string,
-    listings?: Array<Listing>,
+    listings?: Array<string>,
   };
 }

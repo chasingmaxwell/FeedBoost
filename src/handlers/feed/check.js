@@ -2,7 +2,6 @@
 
 import type { LambdaHandler, User } from 'custom-types';
 
-const _ = require('lodash');
 const config = require('config');
 const { scan: userScan, update: userUpdate } = require('../../lib/user');
 const feed = require('../../lib/feed');
@@ -23,7 +22,11 @@ const handler: LambdaHandler = (event, context, callback) =>
     scanStream.on('data', (users: Array<User>) => {
       // Get the feed associated with this user.
       const ops = users.map((user) => {
-        const newUser = _.cloneDeep(user);
+        const newUser = {
+          email: user.email,
+          code: user.code,
+          listings: user.listings || [],
+        };
         const result = {};
         result.user = newUser;
 
@@ -35,9 +38,6 @@ const handler: LambdaHandler = (event, context, callback) =>
               (listings = []) =>
                 new Promise((_resolve, _reject) => {
                   result.listings = listings;
-
-                  // Make sure the listings property exists.
-                  newUser.listings = newUser.listings || [];
 
                   const diff = listings.filter(
                     (item) => newUser.listings.indexOf(item.id) === -1

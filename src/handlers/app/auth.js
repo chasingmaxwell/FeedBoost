@@ -2,10 +2,10 @@
 
 import type { LambdaHandler } from 'custom-types';
 
-const _ = require('lodash');
 const config = require('config');
 const request = require('request-promise');
 const cookie = require('cookie');
+const util = require('../../util');
 const User = require('../../lib/user');
 const Token = require('../../lib/token');
 const Cryptr = require('cryptr');
@@ -25,7 +25,7 @@ const handler: LambdaHandler = (event, context, callback) => {
     new Promise((resolve, reject) => {
       // Check for a valid state parameter.
       const state = Token.verify(
-        _.get(event, 'queryStringParameters.state', '')
+        util.path(['queryStringParameters', 'state'])(event) || ''
       );
 
       if (state !== reverbKey) {
@@ -44,7 +44,7 @@ const handler: LambdaHandler = (event, context, callback) => {
           qs: {
             client_id: reverbKey,
             client_secret: reverbSecret,
-            code: _.get(event, 'queryStringParameters.code', ''),
+            code: util.path(['queryStringParameters', 'code'])(event),
             grant_type: 'authorization_code',
             redirect_uri: `${baseUri}${redirectPath}`,
           },
@@ -88,7 +88,7 @@ const handler: LambdaHandler = (event, context, callback) => {
           .catch((e) => {
             if (
               e.statusCode !== 422 ||
-              !_.get(e, 'error.errors.url', []).includes(
+              !(util.path(['error', 'errors', 'url'])(e) || []).includes(
                 'has already been taken'
               )
             ) {

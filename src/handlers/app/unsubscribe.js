@@ -2,7 +2,7 @@
 
 import type { LambdaHandler } from 'custom-types';
 
-const _ = require('lodash');
+const util = require('../../util');
 const config = require('config');
 const User = require('../../lib/user');
 const Cryptr = require('cryptr');
@@ -12,7 +12,7 @@ const cryptrKey = config.get('app.cryptrKey');
 const handler: LambdaHandler = (event, context, callback) => {
   const cryptr = new Cryptr(cryptrKey);
   const email = cryptr.decrypt(
-    decodeURIComponent(_.get(event, 'pathParameters.hash', ''))
+    decodeURIComponent(util.path(['pathParameters', 'hash'])(event) || '')
   );
 
   return (
@@ -25,7 +25,7 @@ const handler: LambdaHandler = (event, context, callback) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: '{message: "success"}',
+          body: '{"message": "success"}',
         });
       })
 

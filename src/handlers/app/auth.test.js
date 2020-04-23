@@ -178,7 +178,7 @@ describe('auth', () => {
       },
     });
   });
-  it('catches errors, redirects to the homepage, and displays an error message', async () => {
+  it('catches unanticipated errors from reverb, redirects to the homepage, and displays an error message', async () => {
     request.mockImplementation(async (req) => {
       if (req.uri === 'https://reverb.com/oauth/token') {
         return {
@@ -189,10 +189,23 @@ describe('auth', () => {
         return user;
       }
       if (req.uri === 'https://reverb.com/api/webhooks/registrations') {
-        throw new Error('whoopsie!');
+        const error = new Error('whoopsie!');
+        error.statusCode = 422;
+        throw error;
       }
     });
     await auth(event, {}, callback);
+    expect(callback).toHaveBeenLastCalledWith(null, {
+      statusCode: 302,
+      body: '',
+      headers: {
+        Location: `http://localhost:3000?errorMessage=Oops!+We+were+unable+to+authenticate+with+your+reverb+account.+If+you+continue+to+have+trouble,+please+contact+admin@feedboost.rocks+for+help.`,
+        'Set-Cookie': 'rtoken=deleted; Max-Age=-1; Path=/; HttpOnly',
+      },
+    });
+  });
+  it('catches errors from missing states, redirects to the homepage, and displays an error message', async () => {
+    await auth({}, {}, callback);
     expect(callback).toHaveBeenLastCalledWith(null, {
       statusCode: 302,
       body: '',

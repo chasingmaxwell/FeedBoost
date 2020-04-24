@@ -1,6 +1,6 @@
 /* @flow */
 
-import type { LambdaHandler } from 'custom-types';
+import type { LambdaHandler, APIGatewayResponse } from 'custom-types';
 
 const config = require('config');
 const User = require('../../lib/user');
@@ -9,7 +9,9 @@ const Token = require('../../lib/token');
 const { name: appName, baseUri, filesUrl } = config.get('app');
 const { host: reverbHost } = config.get('reverb');
 
-const handler: LambdaHandler = (event, context, callback) => {
+const handler: LambdaHandler<APIGatewayResponse> = (
+  event
+): Promise<APIGatewayResponse> => {
   let cookieString = '';
   const page = {
     content: '',
@@ -69,13 +71,12 @@ const handler: LambdaHandler = (event, context, callback) => {
       })
 
       // Return the page.
-      .then(() => {
-        callback(null, {
-          statusCode: 200,
-          headers: {
-            'Content-Type': 'text/html',
-          },
-          body: `
+      .then(() => ({
+        statusCode: 200,
+        headers: {
+          'Content-Type': 'text/html',
+        },
+        body: `
         <!doctype html>
         <html>
         <head>
@@ -225,8 +226,7 @@ const handler: LambdaHandler = (event, context, callback) => {
         </body>
         </html>
         `,
-        });
-      })
+      }))
   );
 };
 

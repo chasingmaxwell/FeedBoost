@@ -102,11 +102,9 @@ const user = require('../../lib/user');
 const scanMock = jest.spyOn(user, 'scan');
 const handler = require('./check');
 
-const callback = jest.fn();
-
 describe('feed.check handler', () => {
   beforeAll(async () => {
-    await handler({}, {}, callback);
+    await handler();
   });
 
   it('scans the users database', () => {
@@ -222,13 +220,11 @@ Object {
         ],
       })
     );
-    await handler({}, {}, callback);
-    expect(callback).toHaveBeenLastCalledWith(expect.any(Error));
-    expect(
-      JSON.parse(
-        callback.mock.calls[callback.mock.calls.length - 1][0].message
-      )[0].error
-    ).toBe('whoopsie!');
+    try {
+      await handler();
+    } catch (e) {
+      expect(JSON.parse(e.message)[0].error).toBe('whoopsie!');
+    }
   });
 
   it('reports error when there is a problem fetching a feed', async () => {
@@ -248,13 +244,11 @@ Object {
     request.mockImplementationOnce(async () => {
       throw error;
     });
-    await handler({}, {}, callback);
-    expect(callback).toHaveBeenLastCalledWith(expect.any(Error));
-    expect(
-      JSON.parse(
-        callback.mock.calls[callback.mock.calls.length - 1][0].message
-      )[0].error
-    ).toBe('whoopsie!');
+    try {
+      await handler();
+    } catch (e) {
+      expect(JSON.parse(e.message)[0].error).toBe('whoopsie!');
+    }
   });
 
   it('reports error when there is a problem updating a user', async () => {
@@ -281,13 +275,11 @@ Object {
     DynamoDB.DocumentClient.prototype.update.mockImplementationOnce((p, cb) =>
       cb(error)
     );
-    await handler({}, {}, callback);
-    expect(callback).toHaveBeenLastCalledWith(expect.any(Error));
-    expect(
-      JSON.parse(
-        callback.mock.calls[callback.mock.calls.length - 1][0].message
-      )[0].error
-    ).toBe('whoopsie!');
+    try {
+      await handler();
+    } catch (e) {
+      expect(JSON.parse(e.message)[0].error).toBe('whoopsie!');
+    }
   });
 
   it('reports error when the whole function fails', async () => {
@@ -295,7 +287,10 @@ Object {
     scanMock.mockImplementationOnce(() => {
       throw error;
     });
-    await handler({}, {}, callback);
-    expect(callback).toHaveBeenLastCalledWith(error);
+    try {
+      await handler();
+    } catch (e) {
+      expect(e.message).toBe('whoopsie!');
+    }
   });
 });

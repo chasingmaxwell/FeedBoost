@@ -32,16 +32,16 @@ const event = {
     code: 'd4c19d5a5e4e31634236fb37cb',
   },
 };
-const callback = jest.fn();
 
 const auth = require('./auth');
 
 describe('auth', () => {
+  let res;
   afterEach(() => {
     request.mockImplementation(requestImplementation);
   });
   beforeAll(async () => {
-    await auth(event, {}, callback);
+    res = await auth(event, {});
   });
   it('requests the access token from Reverb', () => {
     expect(request).toHaveBeenCalledWith({
@@ -89,7 +89,7 @@ describe('auth', () => {
     });
   });
   it('redirects back to the homepage upon success', () => {
-    expect(callback).toHaveBeenCalledWith(null, {
+    expect(res).toEqual({
       statusCode: 302,
       body: '',
       headers: {
@@ -121,9 +121,7 @@ describe('auth', () => {
         throw error;
       }
     });
-    await auth(event, {}, callback);
-    expect(callback).toHaveBeenCalledTimes(2);
-    expect(callback).toHaveBeenLastCalledWith(null, {
+    await expect(auth(event)).resolves.toEqual({
       statusCode: 302,
       body: '',
       headers: {
@@ -148,8 +146,7 @@ describe('auth', () => {
         };
       }
     });
-    await auth(event, {}, callback);
-    expect(callback).toHaveBeenLastCalledWith(null, {
+    await expect(auth(event)).resolves.toEqual({
       statusCode: 302,
       body: '',
       headers: {
@@ -159,17 +156,14 @@ describe('auth', () => {
     });
   });
   it('rejects when the state parameter does not match the reverb key', async () => {
-    await auth(
-      {
+    await expect(
+      auth({
         queryStringParameters: {
           state:
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlIjoibm9wZSIsImlhdCI6MTU4NzQxNTI3MX0.LUosCYadgVkogc4X7n2u3-9t86qgDBAE5gl2uP_w7cU',
         },
-      },
-      {},
-      callback
-    );
-    expect(callback).toHaveBeenLastCalledWith(null, {
+      })
+    ).resolves.toEqual({
       statusCode: 302,
       body: '',
       headers: {
@@ -194,8 +188,7 @@ describe('auth', () => {
         throw error;
       }
     });
-    await auth(event, {}, callback);
-    expect(callback).toHaveBeenLastCalledWith(null, {
+    await expect(auth(event)).resolves.toEqual({
       statusCode: 302,
       body: '',
       headers: {
@@ -205,8 +198,7 @@ describe('auth', () => {
     });
   });
   it('catches errors from missing states, redirects to the homepage, and displays an error message', async () => {
-    await auth({}, {}, callback);
-    expect(callback).toHaveBeenLastCalledWith(null, {
+    await expect(auth({})).resolves.toEqual({
       statusCode: 302,
       body: '',
       headers: {

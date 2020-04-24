@@ -1,6 +1,6 @@
 /* @flow */
 
-import type { LambdaHandler } from 'custom-types';
+import type { LambdaHandler, APIGatewayResponse } from 'custom-types';
 
 const util = require('../../util');
 const config = require('config');
@@ -9,31 +9,24 @@ const Cryptr = require('cryptr');
 
 const cryptrKey = config.get('app.cryptrKey');
 
-const handler: LambdaHandler = (event, context, callback) => {
+const handler: LambdaHandler<APIGatewayResponse> = async (
+  event
+): Promise<APIGatewayResponse> => {
   const cryptr = new Cryptr(cryptrKey);
   const email = cryptr.decrypt(
     decodeURIComponent(util.path(['pathParameters', 'hash'])(event) || '')
   );
 
-  return (
-    User.delete(email)
+  await User.delete(email);
 
-      // Return a 200 response.
-      .then(() => {
-        callback(null, {
-          statusCode: 200,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: '{"message": "success"}',
-        });
-      })
-
-      // Uh-oh. Something went wrong.
-      .catch((e) => {
-        callback(e);
-      })
-  );
+  // Return a 200 response.
+  return {
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: '{"message": "success"}',
+  };
 };
 
 module.exports = handler;

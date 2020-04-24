@@ -1,6 +1,6 @@
 /* @flow */
 
-import type { LambdaHandler } from 'custom-types';
+import type { LambdaHandler, APIGatewayResponse } from 'custom-types';
 
 const home = require('./home.js');
 const subscribe = require('./subscribe.js');
@@ -15,4 +15,4 @@ module.exports = {
   auth,
   logout,
 };
-(module.exports: { [name: string]: LambdaHandler });
+(module.exports: { [name: string]: LambdaHandler<APIGatewayResponse> });

@@ -1,6 +1,6 @@
 /* @flow */
 
-import type { LambdaHandler } from 'custom-types';
+import type { LambdaHandler, APIGatewayResponse } from 'custom-types';
 
 const config = require('config');
 const Token = require('../../lib/token');
@@ -9,7 +9,9 @@ const User = require('../../lib/user');
 const { host: reverbHost, key: reverbKey, redirectPath } = config.get('reverb');
 const { baseUri } = config.get('app');
 
-const handler: LambdaHandler = (event, context, callback) => {
+const handler: LambdaHandler<APIGatewayResponse> = (
+  event
+): Promise<APIGatewayResponse> => {
   const cookieString =
     typeof event.headers.Cookie !== 'undefined' ? event.headers.Cookie : '';
 
@@ -24,26 +26,23 @@ const handler: LambdaHandler = (event, context, callback) => {
       .then((token) => User.getFromToken(token))
 
       // Redirect to the homepage if we already have a user.
-      .then(() => {
-        callback(null, {
-          statusCode: 302,
-          body: '',
-          headers: {
-            Location: baseUri,
-          },
-        });
-      })
+      .then(() => ({
+        statusCode: 302,
+        body: '',
+        headers: {
+          Location: baseUri,
+        },
+      }))
 
-      .catch(() => {
-        const state = Token.sign(reverbKey);
-        callback(null, {
-          statusCode: 302,
-          body: '',
-          headers: {
-            Location: `${reverbHost}/oauth/authorize?client_id=${reverbKey}&redirect_uri=${baseUri}${redirectPath}&response_type=code&scope=read_lists+read_profile&state=${state}`,
-          },
-        });
-      })
+      .catch(() => ({
+        statusCode: 302,
+        body: '',
+        headers: {
+          Location: `${reverbHost}/oauth/authorize?client_id=${reverbKey}&redirect_uri=${baseUri}${redirectPath}&response_type=code&scope=read_lists+read_profile&state=${Token.sign(
+            reverbKey
+          )}`,
+        },
+      }))
   );
 };
 

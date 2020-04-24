@@ -19,5 +19,5 @@ module.exports = (user: User): Promise<Array<Listing>> => {
     headers: {
       Authorization: `Bearer ${code}`,
     },
-  }).then(response => response.listings);
+  }).then((response) => response.listings);
 };

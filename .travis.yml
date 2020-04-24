@@ -31,6 +31,7 @@ jobs:
 
     - stage: deploy-dev
       script:
+        - yarn --prod
         - yarn sls deploy -s dev -v && yarn sls -s dev files
 
     - stage: release

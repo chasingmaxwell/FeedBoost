@@ -13,18 +13,17 @@ const event = {
     hash: 'd0d7bd544d472750703cf536c796f0a836f33b983d5db0',
   },
 };
-const context = {};
-const callback = jest.fn();
 
 describe('unsubscribe', () => {
+  let res;
   beforeAll(async () => {
-    await unsubscribe(event, context, callback);
+    res = await unsubscribe(event);
   });
   it('deletes the user', () => {
     expect(User.delete).toHaveBeenCalledWith('example@feedboost.rocks');
   });
   it('responds with a 200 status code', () => {
-    expect(callback).toHaveBeenCalledWith(null, {
+    expect(res).toEqual({
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
@@ -33,8 +32,6 @@ describe('unsubscribe', () => {
     });
   });
   it('catches errors and returns them in the callback', async () => {
-    await unsubscribe({}, context, callback);
-    expect(callback).toHaveBeenLastCalledWith(expect.any(Error));
-    expect(callback.mock.calls[1][0].message).toBe('No user with that email');
+    await expect(unsubscribe({})).rejects.toThrow('No user with that email');
   });
 });

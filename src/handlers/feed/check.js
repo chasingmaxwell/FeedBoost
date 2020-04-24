@@ -12,9 +12,16 @@ const reverbHost = config.get('reverb.host');
 
 const ses = new AWS.SES();
 
+export type Response = {
+  count: number,
+  updated: number,
+  notified: number,
+  errors: *,
+};
+
 // Consume the user scan stream and operate on each batch — and each user in
 // each batch — in parallel.
-const handler: LambdaHandler = (event, context, callback) =>
+const handler: LambdaHandler<Response> = (): Promise<Response> =>
   new Promise((resolve) => {
     const batches = [];
     const scanStream = userScan();
@@ -183,16 +190,11 @@ const handler: LambdaHandler = (event, context, callback) =>
         console.info(JSON.stringify(results)); // eslint-disable-line no-console
 
         if (errors.length > 0) {
-          return callback(new Error(JSON.stringify(errors)));
+          throw new Error(JSON.stringify(errors));
         }
 
-        return callback(null, results);
+        return results;
       })
-    )
-
-    // Uh-oh. Something unexpected went wrong.
-    .catch((err) => {
-      callback(err);
-    });
+    );
 
 module.exports = handler;

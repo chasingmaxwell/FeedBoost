@@ -38,6 +38,12 @@ declare module 'custom-types' {
     resource: string,
   };
 
+  declare type APIGatewayResponse = {
+    statusCode: number,
+    body: string,
+    headers: { [key: string]: string },
+  };
+
   declare type LambdaContext = {
     callbackWaitsForEmptyEventLoop: boolean,
     functionName: string,
@@ -51,11 +57,11 @@ declare module 'custom-types' {
 
   declare type LambdaCallback = (error: ?Error, result: ?any) => void;
 
-  declare type LambdaHandler = (
+  declare type LambdaHandler<R> = (
     event: ApiGatewayEvent,
     context: LambdaContext,
     callback: LambdaCallback
-  ) => void | Promise<void>;
+  ) => Promise<R>;
 
   declare type Listing = {
     id: string,

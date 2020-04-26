@@ -85,6 +85,8 @@ functions:
     handler: lib/handlers/feed.check
     events:
       - schedule: rate(1 hour)
+  migrate:
+    handler: lib/handlers/migrate.handler
 resources:
   Resources:
     filesDir:

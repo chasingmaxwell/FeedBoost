@@ -60,7 +60,6 @@ const handler: LambdaHandler<APIGatewayResponse> = async (
       email: user.email,
     });
 
-    // @TODO: check against the state parameter.
     const token = Token.sign(updatedUser.code);
     const cookieString = cookie.serialize('rtoken', String(token), {
       httpOnly: true,

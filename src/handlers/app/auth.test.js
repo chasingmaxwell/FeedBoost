@@ -28,8 +28,9 @@ const event = {
   queryStringParameters: {
     // keepitsecret
     state:
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlIjoia2VlcGl0c2VjcmV0IiwiaWF0IjoxNTg3NDA3Njg3fQ.Mukh9-mvYIABo_gbQ5fJCJnDJhKuTbMWqHLa2w-3c2Y',
-    code: 'd4c19d5a5e4e31634236fb37cb',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RlIjoia2VlcGl0c2VjcmV0IiwiaWF0IjoxNTg3ODY4MjA3fQ.J21edGKcibAoMVX98DHdjtSTurIDFYJsw7T5MWouS5Y',
+    code:
+      'b5f4f349faa21ae49459b622b47ed2fdc8c0cf23f7b14ed5e9568d8bd2da897d3b7c011ad0cc7cf16c8df83a87faab6f26396ba260f42156ec594013063839991341624c61700e457cae560e2160a1b8cc055f1432b54ba5d23a53c0be501160a1659efc69eedb5d853eefdc51',
   },
 };
 
@@ -51,7 +52,8 @@ describe('auth', () => {
       qs: {
         client_id: 'keepitsecret',
         client_secret: 'keepitsecret',
-        code: 'd4c19d5a5e4e31634236fb37cb',
+        code:
+          'b5f4f349faa21ae49459b622b47ed2fdc8c0cf23f7b14ed5e9568d8bd2da897d3b7c011ad0cc7cf16c8df83a87faab6f26396ba260f42156ec594013063839991341624c61700e457cae560e2160a1b8cc055f1432b54ba5d23a53c0be501160a1659efc69eedb5d853eefdc51',
         grant_type: 'authorization_code',
         redirect_uri: 'http://localhost:3000/subscribe/success',
       },
@@ -76,15 +78,14 @@ describe('auth', () => {
         'Content-Type': 'application/hal+json',
       },
       body: {
-        url:
-          'http://localhost:3000/unsubscribe/d0d7bd544d472750703cf536c796f0a836f33b983d5db0',
+        url: expect.stringContaining('http://localhost:3000/unsubscribe/'),
         topic: 'app/uninstalled',
       },
     });
   });
   it('creates a user if the user is allowed', () => {
     expect(update).toHaveBeenCalledWith({
-      code: 'd4c19d5a5e4e31634236fb37cb',
+      code: expect.any(String),
       email: 'example@feedboost.rocks',
     });
   });

@@ -7,14 +7,16 @@ jest.mock('aws-sdk', () => {
     .fn()
     .mockImplementationOnce((p, cb) =>
       cb(null, {
-        code: 'dbc090504e5f2b7e712ac73bd191d1be35',
+        code:
+          '671f16ab3f5d2480ff6751e4f8df0f5910688f1efe7ed82c0fe1934e07dcaba6ab4e942db81537b52464c884d4fa58a0074ad27770ccdec020462960da2939eb71dfe5c5342a67541abfb3e78f43f8d1654e97cea57790893ee1c38370672d71fe02afe45db8a50d19cc69198197a7717c',
         email: 'noListingsWithNew@feedboost.rocks',
         listings: [],
       })
     )
     .mockImplementationOnce((p, cb) =>
       cb(null, {
-        code: 'c6c0b15c714231647f37f721f290ebb30cb83e',
+        code:
+          'a2e66e1a2a66c13e447dd46a1090adf4ccc3f02c03fa783d37574f6776c74b0eaf52290f913f75c7fa44471344504806bbc6e8f7bcf32fb98a1c51e10a52d6f7b0221207e15212bc76b5d6f44747128f95baa413956d39a80657aa486492e7084bbc1ce05598f63247539b8eca65073b31cc5d',
         email: 'someListingsWithNew@feedboost.rocks',
         listings: ['123'],
       })
@@ -26,12 +28,14 @@ jest.mock('aws-sdk', () => {
         Items: [
           // No listings - no new.
           {
-            code: 'dbc090504e5f2b7e712ade3deb9ce8',
+            code:
+              '2c6b73e9ac6d4c4d6a14956ee6f44824bd03d31132da176006a2c7938343906cec346a2f0bb067f48eb8375afdd4b01607c0492525fbfc4eee8a49b93fbbb381b63e7369316e7eddb7b851c8369cfe2dc2c2eb15aeda125614e2f43dbaa388c1748a86739a8118ee0cc5bd55a49434',
             email: 'noListingsNoNew@feedboost.rocks',
           },
           // some listings - no new.
           {
-            code: 'c6c0b15c714231647f37f721eb96d1be35',
+            code:
+              'ef822816889fdd619e5d3c6ad856dfd6b06099d07355d97f1be7b6936ddad909f54e1500dccba4ee2a6d0299eb27f74a966611a5083e729b9d671c377b24cc3d8f7f6551b629f5b7819d562997be2da09ba937d6f0c9faf32c2a3094bc2fbd6fd279c68bf2f31c95cbd680819c077c3ba7',
             email: 'someListingsNoNew@feedboost.rocks',
             listings: ['123', '456'],
           },
@@ -44,13 +48,15 @@ jest.mock('aws-sdk', () => {
         Items: [
           // No listings - with new.
           {
-            code: 'dbc090504e5f2b7e712ac73bd191d1be35',
+            code:
+              '671f16ab3f5d2480ff6751e4f8df0f5910688f1efe7ed82c0fe1934e07dcaba6ab4e942db81537b52464c884d4fa58a0074ad27770ccdec020462960da2939eb71dfe5c5342a67541abfb3e78f43f8d1654e97cea57790893ee1c38370672d71fe02afe45db8a50d19cc69198197a7717c',
             email: 'noListingsWithNew@feedboost.rocks',
             listings: [],
           },
           // some listings - with new.
           {
-            code: 'c6c0b15c714231647f37f721f290ebb30cb83e',
+            code:
+              'a2e66e1a2a66c13e447dd46a1090adf4ccc3f02c03fa783d37574f6776c74b0eaf52290f913f75c7fa44471344504806bbc6e8f7bcf32fb98a1c51e10a52d6f7b0221207e15212bc76b5d6f44747128f95baa413956d39a80657aa486492e7084bbc1ce05598f63247539b8eca65073b31cc5d',
             email: 'someListingsWithNew@feedboost.rocks',
             listings: ['123'],
           },
@@ -212,8 +218,8 @@ Object {
       cb(null, {
         Items: [
           {
-            // will generate an error.
-            code: 'd0ddae564f',
+            code:
+              '59b59339ef50292b49f914647b35513ab74e939fd5b60f281d9811f80aaba243939f7aef15ab2fd3e85ccbd1e648252c6fc299eeb2c96815a5a26bd0873125975385237f7d01d7e2fc2fb809cd5bcdf5bc62fcae8f2f7b16488c3a9dac93cb11a62395',
             email: 'error@feedboost.rocks',
             listings: ['123'],
           },
@@ -233,8 +239,8 @@ Object {
       cb(null, {
         Items: [
           {
-            // will generate an error.
-            code: 'd0ddae564f',
+            code:
+              '59b59339ef50292b49f914647b35513ab74e939fd5b60f281d9811f80aaba243939f7aef15ab2fd3e85ccbd1e648252c6fc299eeb2c96815a5a26bd0873125975385237f7d01d7e2fc2fb809cd5bcdf5bc62fcae8f2f7b16488c3a9dac93cb11a62395',
             email: 'error@feedboost.rocks',
             listings: ['123'],
           },
@@ -257,8 +263,8 @@ Object {
       cb(null, {
         Items: [
           {
-            // will generate an error.
-            code: 'd0ddae564f',
+            code:
+              '59b59339ef50292b49f914647b35513ab74e939fd5b60f281d9811f80aaba243939f7aef15ab2fd3e85ccbd1e648252c6fc299eeb2c96815a5a26bd0873125975385237f7d01d7e2fc2fb809cd5bcdf5bc62fcae8f2f7b16488c3a9dac93cb11a62395',
             email: 'error@feedboost.rocks',
             listings: ['123'],
           },
@@ -267,7 +273,8 @@ Object {
     );
     DynamoDB.DocumentClient.prototype.get.mockImplementationOnce((p, cb) =>
       cb(null, {
-        code: 'd0ddae564f',
+        code:
+          '59b59339ef50292b49f914647b35513ab74e939fd5b60f281d9811f80aaba243939f7aef15ab2fd3e85ccbd1e648252c6fc299eeb2c96815a5a26bd0873125975385237f7d01d7e2fc2fb809cd5bcdf5bc62fcae8f2f7b16488c3a9dac93cb11a62395',
         email: 'error@feedboost.rocks',
         listings: ['123'],
       })

@@ -4064,9 +4064,10 @@ crypto-random-string@^2.0.0:
   resolved "https://registry.yarnpkg.com/crypto-random-string/-/crypto-random-string-2.0.0.tgz#ef2a7a966ec11083388369baa02ebead229b30d5"
   integrity sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==
 
-cryptr@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/cryptr/-/cryptr-2.0.0.tgz#adff600162f4a2b1d98c4e2185dcdda68b0a0a72"
+cryptr@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/cryptr/-/cryptr-6.0.2.tgz#3f9e97f825ffb93f425eb24068efbb6a652bf947"
+  integrity sha512-1TRHI4bmuLIB8WgkH9eeYXzhEg1T4tonO4vVaMBKKde8Dre51J68nAgTVXTwMYXAf7+mV2gBCkm/9wksjSb2sA==
 
 cssom@^0.4.1:
   version "0.4.4"

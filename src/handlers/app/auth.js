@@ -51,28 +51,37 @@ const handler: LambdaHandler<APIGatewayResponse> = async (
     // Get the user entity from Reverb
     const user = await getReverbUser(access_token);
 
-    // Register the reverb uninstall webhook
-    await registerUninstallHook(access_token, user);
-
-    // Try to create a corresponding user.
-    const updatedUser = await User.update({
-      code: cryptr.encrypt(access_token),
-      email: user.email,
-    });
-
-    const token = Token.sign(updatedUser.code);
-    const cookieString = cookie.serialize('rtoken', String(token), {
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 7, // 1 week
-      path: '/',
-    });
+    const [updatedUser] = await Promise.all([
+      // Create a corresponding user.
+      User.update({
+        code: cryptr.encrypt(access_token),
+        email: user.email,
+      }),
+      // Register the reverb uninstall webhook
+      registerUninstallHook(access_token, user).catch((error) => {
+        console.log(
+          JSON.stringify({
+            message: 'Uninstall webhook failed to register',
+            error,
+          })
+        );
+      }),
+    ]);
 
     // Redirect to the client.
     return {
       statusCode: 302,
       body: '',
       headers: {
-        'Set-Cookie': cookieString,
+        'Set-Cookie': cookie.serialize(
+          'rtoken',
+          String(Token.sign(updatedUser.code)),
+          {
+            httpOnly: true,
+            maxAge: 60 * 60 * 24 * 7, // 1 week
+            path: '/',
+          }
+        ),
         Location: baseUri,
       },
     };

@@ -14,4 +14,10 @@ module.exports = {
     secret: process.env.REVERB_SECRET,
     redirectPath: process.env.REVERB_REDIRECT_PATH,
   },
+  logger: {
+    transport: 'Console',
+    level: process.env.LOG_LEVEL || 'info',
+    exitOnError: false,
+    handleExceptions: true,
+  },
 };

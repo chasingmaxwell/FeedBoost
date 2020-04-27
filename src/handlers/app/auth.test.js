@@ -1,7 +1,11 @@
+jest.mock('../../lib/logger', () => ({
+  log: jest.fn(),
+}));
 jest.mock('request-promise', () => jest.fn());
 jest.mock('../../lib/user', () => ({
   update: jest.fn(),
 }));
+const logger = require('../../lib/logger');
 const request = require('request-promise');
 const { update } = require('../../lib/user');
 const user = {
@@ -161,6 +165,13 @@ describe('auth', () => {
         Location: 'http://localhost:3000',
       },
     });
+    expect(logger.log).toHaveBeenLastCalledWith({
+      level: 'error',
+      message: 'Uninstall webhook failed to register',
+      meta: {
+        error: 'whoopsie!',
+      },
+    });
   });
   it('does not create a user if the user is not allowed', async () => {
     request.mockImplementation(async (req) => {
@@ -184,6 +195,13 @@ describe('auth', () => {
         'Set-Cookie': 'rtoken=deleted; Max-Age=-1; Path=/; HttpOnly',
       },
     });
+    expect(logger.log).toHaveBeenLastCalledWith({
+      level: 'error',
+      message: 'Something unexpected went wrong',
+      meta: {
+        error: 'User is not allowed.',
+      },
+    });
   });
   it('rejects when the state parameter does not match the reverb key', async () => {
     await expect(
@@ -199,6 +217,13 @@ describe('auth', () => {
       headers: {
         Location: `http://localhost:3000?errorMessage=Oops!+We+were+unable+to+authenticate+with+your+reverb+account.+If+you+continue+to+have+trouble,+please+contact+admin@feedboost.rocks+for+help.`,
         'Set-Cookie': 'rtoken=deleted; Max-Age=-1; Path=/; HttpOnly',
+      },
+    });
+    expect(logger.log).toHaveBeenLastCalledWith({
+      level: 'error',
+      message: 'Something unexpected went wrong',
+      meta: {
+        error: 'The state parameter did not match.',
       },
     });
   });
@@ -222,6 +247,13 @@ describe('auth', () => {
         'Set-Cookie': 'rtoken=deleted; Max-Age=-1; Path=/; HttpOnly',
       },
     });
+    expect(logger.log).toHaveBeenLastCalledWith({
+      level: 'error',
+      message: 'Something unexpected went wrong',
+      meta: {
+        error: 'whoopsie!',
+      },
+    });
   });
   it('catches errors from missing states, redirects to the homepage, and displays an error message', async () => {
     await expect(auth({})).resolves.toEqual({
@@ -230,6 +262,13 @@ describe('auth', () => {
       headers: {
         Location: `http://localhost:3000?errorMessage=Oops!+We+were+unable+to+authenticate+with+your+reverb+account.+If+you+continue+to+have+trouble,+please+contact+admin@feedboost.rocks+for+help.`,
         'Set-Cookie': 'rtoken=deleted; Max-Age=-1; Path=/; HttpOnly',
+      },
+    });
+    expect(logger.log).toHaveBeenLastCalledWith({
+      level: 'error',
+      message: 'Something unexpected went wrong',
+      meta: {
+        error: 'Token invalid.',
       },
     });
   });

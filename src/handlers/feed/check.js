@@ -5,6 +5,7 @@ import type { LambdaHandler, User } from 'custom-types';
 const config = require('config');
 const { scan: userScan, update: userUpdate } = require('../../lib/user');
 const feed = require('../../lib/feed');
+const logger = require('../../lib/logger');
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
 
 const { name: appName, email: appEmail, filesUrl } = config.get('app');
@@ -187,7 +188,13 @@ const handler: LambdaHandler<Response> = (): Promise<Response> =>
           errors,
         };
 
-        console.info(JSON.stringify(results)); // eslint-disable-line no-console
+        logger.log({
+          level: 'info',
+          message: 'Feed check results',
+          meta: {
+            results,
+          },
+        });
 
         if (errors.length > 0) {
           throw new Error(JSON.stringify(errors));

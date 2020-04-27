@@ -1,3 +1,6 @@
+jest.mock('../../lib/logger', () => ({
+  log: jest.fn(),
+}));
 jest.mock('aws-sdk', () => {
   function SES() {}
   SES.prototype.sendEmail = jest.fn((p, cb) => cb());
@@ -102,6 +105,7 @@ jest.mock('request-promise', () =>
   })
 );
 
+const logger = require('../../lib/logger');
 const request = require('request-promise');
 const { SES, DynamoDB } = require('aws-sdk');
 const user = require('../../lib/user');
@@ -111,6 +115,21 @@ const handler = require('./check');
 describe('feed.check handler', () => {
   beforeAll(async () => {
     await handler();
+  });
+
+  it('logs the results', () => {
+    expect(logger.log).toHaveBeenCalledWith({
+      level: 'info',
+      message: 'Feed check results',
+      meta: {
+        results: {
+          count: 4,
+          errors: [],
+          notified: 2,
+          updated: 2,
+        },
+      },
+    });
   });
 
   it('scans the users database', () => {

@@ -8,6 +8,7 @@ const cookie = require('cookie');
 const util = require('../../util');
 const User = require('../../lib/user');
 const Token = require('../../lib/token');
+const logger = require('../../lib/logger');
 const Cryptr = require('cryptr');
 const { getReverbUser, registerUninstallHook } = require('./auth.util');
 
@@ -59,12 +60,13 @@ const handler: LambdaHandler<APIGatewayResponse> = async (
       }),
       // Register the reverb uninstall webhook
       registerUninstallHook(access_token, user).catch((error) => {
-        console.log(
-          JSON.stringify({
-            message: 'Uninstall webhook failed to register',
-            error,
-          })
-        );
+        logger.log({
+          level: 'error',
+          message: 'Uninstall webhook failed to register',
+          meta: {
+            error: error.message,
+          },
+        });
       }),
     ]);
 
@@ -85,9 +87,15 @@ const handler: LambdaHandler<APIGatewayResponse> = async (
         Location: baseUri,
       },
     };
-  } catch (err) {
+  } catch (error) {
     // Uh-oh. Something went wrong.
-    console.error(JSON.stringify(err)); // eslint-disable-line no-console
+    logger.log({
+      level: 'error',
+      message: 'Something unexpected went wrong',
+      meta: {
+        error: error.message,
+      },
+    });
 
     return {
       statusCode: 302,

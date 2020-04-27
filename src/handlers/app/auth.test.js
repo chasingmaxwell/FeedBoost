@@ -133,6 +133,35 @@ describe('auth', () => {
       },
     });
   });
+  it('does not fail authentication if the webhook does not get registered', async () => {
+    request.mockImplementation(async (req) => {
+      if (req.uri === 'https://reverb.com/oauth/token') {
+        return {
+          access_token: 'anAccessToken',
+        };
+      }
+
+      if (req.uri === 'https://reverb.com/api/my/account') {
+        return user;
+      }
+
+      if (req.uri === 'https://reverb.com/api/webhooks/registrations') {
+        const error = new Error('whoopsie!');
+        error.statusCode = 409;
+        throw error;
+      }
+    });
+    await expect(auth(event)).resolves.toEqual({
+      statusCode: 302,
+      body: '',
+      headers: {
+        'Set-Cookie': expect.stringMatching(
+          /rtoken=[^;]+; Max-Age=604800; Path=\/; HttpOnly/
+        ),
+        Location: 'http://localhost:3000',
+      },
+    });
+  });
   it('does not create a user if the user is not allowed', async () => {
     request.mockImplementation(async (req) => {
       if (req.uri === 'https://reverb.com/oauth/token') {
@@ -181,11 +210,7 @@ describe('auth', () => {
         };
       }
       if (req.uri === 'https://reverb.com/api/my/account') {
-        return user;
-      }
-      if (req.uri === 'https://reverb.com/api/webhooks/registrations') {
         const error = new Error('whoopsie!');
-        error.statusCode = 422;
         throw error;
       }
     });
